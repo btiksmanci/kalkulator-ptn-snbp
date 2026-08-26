@@ -12,25 +12,25 @@ st.set_page_config(
 )
 
 # ==========================================
-# 2. PERMANENT LIGHT THEME & MODERN CSS
+# 2. MODERN LIGHT THEME CSS
 # ==========================================
 LIGHT_THEME_CSS = """
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-    /* SYSTEM COLOR VARIABLES (PERMANENT LIGHT MODE) */
+    /* SYSTEM LIGHT PALETTE */
     :root {
-        --bg-main: #F8FAFC;
+        --bg-main: #F1F5F9;
         --bg-card: #FFFFFF;
-        --bg-input: #F1F5F9;
+        --bg-input: #F8FAFC;
         --border-color: #E2E8F0;
         --text-primary: #0F172A;
-        --text-secondary: #64748B;
+        --text-secondary: #475569;
         --accent-blue: #2563EB;
         --accent-blue-hover: #1D4ED8;
         --accent-light: #EFF6FF;
-        --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 2px 4px -2px rgba(0, 0, 0, 0.03);
-        --shadow-lg: 0 10px 25px -3px rgba(15, 23, 42, 0.06);
+        --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
+        --shadow-lg: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
     }
 
     /* GLOBAL RESET */
@@ -43,9 +43,9 @@ LIGHT_THEME_CSS = """
     #MainMenu, footer, header { visibility: hidden; height: 0; }
     
     .block-container {
-        padding-top: 1rem !important;
+        padding-top: 1.2rem !important;
         padding-bottom: 3rem !important;
-        max-width: 800px !important;
+        max-width: 820px !important;
     }
 
     /* NAVBAR */
@@ -53,12 +53,12 @@ LIGHT_THEME_CSS = """
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 0.75rem 0;
+        padding: 0.8rem 0;
         margin-bottom: 1.5rem;
         border-bottom: 1px solid var(--border-color);
     }
     .app-brand {
-        font-size: 1.25rem;
+        font-size: 1.3rem;
         font-weight: 800;
         letter-spacing: -0.5px;
         color: var(--text-primary);
@@ -68,45 +68,47 @@ LIGHT_THEME_CSS = """
     }
     .app-brand span { color: var(--accent-blue); }
     .light-badge {
-        font-size: 0.72rem;
+        font-size: 0.75rem;
         font-weight: 700;
-        background: var(--bg-input);
-        color: var(--text-secondary);
-        padding: 4px 10px;
+        background: var(--accent-light);
+        color: var(--accent-blue);
+        padding: 4px 12px;
         border-radius: 99px;
-        border: 1px solid var(--border-color);
+        border: 1px solid #DBEAFE;
     }
 
     /* HERO SECTION */
     .hero-container {
         text-align: center;
-        margin: 1rem 0 2rem 0;
+        margin: 1rem 0 2.2rem 0;
     }
     .hero-badge {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: var(--accent-light);
+        background: #FFFFFF;
         color: var(--accent-blue);
-        padding: 5px 14px;
+        border: 1px solid var(--border-color);
+        padding: 6px 16px;
         border-radius: 99px;
         font-size: 0.78rem;
         font-weight: 700;
         margin-bottom: 0.8rem;
+        box-shadow: var(--shadow-sm);
     }
     .hero-title {
-        font-size: 2rem;
+        font-size: 2.1rem;
         font-weight: 800;
         line-height: 1.25;
-        letter-spacing: -0.7px;
+        letter-spacing: -0.8px;
         color: var(--text-primary);
         margin-bottom: 0.6rem;
     }
     .hero-subtitle {
-        font-size: 0.92rem;
+        font-size: 0.95rem;
         color: var(--text-secondary);
         line-height: 1.5;
-        max-width: 540px;
+        max-width: 560px;
         margin: 0 auto;
     }
 
@@ -115,9 +117,9 @@ LIGHT_THEME_CSS = """
         background: var(--bg-card);
         border: 1px solid var(--border-color);
         border-radius: 16px;
-        padding: 16px 18px;
+        padding: 18px;
         box-shadow: var(--shadow-sm);
-        margin-bottom: 1rem;
+        margin-bottom: 0.8rem;
     }
     .step-header {
         display: flex;
@@ -128,26 +130,26 @@ LIGHT_THEME_CSS = """
     .step-num {
         background: var(--accent-light);
         color: var(--accent-blue);
-        font-size: 0.7rem;
+        font-size: 0.72rem;
         font-weight: 800;
-        padding: 2px 7px;
-        border-radius: 5px;
+        padding: 2px 8px;
+        border-radius: 6px;
     }
     .step-title {
-        font-size: 0.9rem;
+        font-size: 0.92rem;
         font-weight: 700;
         color: var(--text-primary);
     }
     .step-desc {
-        font-size: 0.8rem;
+        font-size: 0.82rem;
         color: var(--text-secondary);
-        margin-bottom: 0.6rem;
+        margin-bottom: 0.7rem;
     }
 
-    /* CUSTOM STREAMLIT SELECTBOX */
+    /* CUSTOM STREAMLIT SELECTBOX TERANG */
     div[data-baseweb="select"] > div {
         background-color: var(--bg-input) !important;
-        border: 1px solid var(--border-color) !important;
+        border: 1.5px solid var(--border-color) !important;
         border-radius: 10px !important;
         color: var(--text-primary) !important;
         min-height: 44px !important;
@@ -157,6 +159,7 @@ LIGHT_THEME_CSS = """
     }
     div[data-baseweb="select"]:hover > div {
         border-color: var(--accent-blue) !important;
+        background-color: #FFFFFF !important;
     }
 
     /* BUTTON ACTION */
@@ -164,61 +167,63 @@ LIGHT_THEME_CSS = """
         background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-blue-hover) 100%) !important;
         color: #FFFFFF !important;
         font-weight: 700 !important;
-        font-size: 1rem !important;
+        font-size: 1.02rem !important;
         height: 50px !important;
         border-radius: 12px !important;
         border: none !important;
-        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3) !important;
+        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25) !important;
         transition: all 0.2s ease !important;
+        margin-top: 6px;
     }
     div.stButton > button:hover {
         transform: translateY(-1px);
-        box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4) !important;
+        box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35) !important;
     }
 
-    /* RESULT HERO CARD */
+    /* RESULT HERO CARD TERANG */
     .result-hero {
         background: var(--bg-card);
         border: 1px solid var(--border-color);
         border-radius: 20px;
-        padding: 24px 16px;
+        padding: 28px 20px;
         text-align: center;
         box-shadow: var(--shadow-lg);
         margin: 1.5rem 0 1rem 0;
     }
     .result-hero-label {
-        font-size: 0.78rem;
+        font-size: 0.8rem;
         font-weight: 700;
         color: var(--text-secondary);
         text-transform: uppercase;
         letter-spacing: 0.8px;
     }
     .result-hero-value {
-        font-size: 3.5rem;
+        font-size: 3.6rem;
         font-weight: 800;
         color: var(--accent-blue);
         letter-spacing: -1.5px;
         line-height: 1.1;
-        margin: 8px 0;
+        margin: 10px 0;
     }
     .badge-status {
         display: inline-block;
-        padding: 4px 14px;
+        padding: 5px 16px;
         border-radius: 99px;
         font-weight: 700;
-        font-size: 0.85rem;
+        font-size: 0.88rem;
     }
     .status-ketat { background: #FEF2F2; color: #EF4444; border: 1px solid #FCA5A5; }
-    .status-sedang { background: #FFFBEB; color: #F59E0B; border: 1px solid #FCD34D; }
+    .status-sedang { background: #FFFBEB; color: #D97706; border: 1px solid #FCD34D; }
     .status-longgar { background: #F0FDF4; color: #16A34A; border: 1px solid #86EFAC; }
 
-    /* METRICS */
+    /* METRICS TERANG */
     .metric-card {
         background: var(--bg-card);
         border: 1px solid var(--border-color);
         border-radius: 14px;
-        padding: 14px;
+        padding: 16px;
         text-align: center;
+        box-shadow: var(--shadow-sm);
     }
     .metric-title {
         font-size: 0.72rem;
@@ -227,10 +232,10 @@ LIGHT_THEME_CSS = """
         text-transform: uppercase;
     }
     .metric-val {
-        font-size: 1.3rem;
+        font-size: 1.35rem;
         font-weight: 800;
         color: var(--text-primary);
-        margin-top: 2px;
+        margin-top: 4px;
     }
 
     /* INSIGHT */
@@ -238,26 +243,27 @@ LIGHT_THEME_CSS = """
         background: var(--bg-card);
         border: 1px solid var(--border-color);
         border-radius: 16px;
-        padding: 18px;
+        padding: 20px;
         margin: 1rem 0;
+        box-shadow: var(--shadow-sm);
     }
 
     /* FOOTER */
     .disclaimer-box {
-        font-size: 0.8rem;
+        font-size: 0.82rem;
         color: var(--text-secondary);
         text-align: center;
         margin-top: 2.5rem;
-        padding-top: 1rem;
+        padding-top: 1.2rem;
         border-top: 1px solid var(--border-color);
     }
 
     /* MOBILE OPTIMIZATION */
     @media (max-width: 640px) {
-        .hero-title { font-size: 1.5rem; }
-        .hero-subtitle { font-size: 0.85rem; }
-        .result-hero-value { font-size: 2.8rem; }
-        .block-container { padding-left: 1rem !important; padding-right: 1rem !important; }
+        .hero-title { font-size: 1.6rem; }
+        .hero-subtitle { font-size: 0.88rem; }
+        .result-hero-value { font-size: 3rem; }
+        .block-container { padding-left: 0.8rem !important; padding-right: 0.8rem !important; }
     }
 </style>
 """
@@ -290,7 +296,7 @@ df = load_data()
 st.markdown("""
 <div class="app-navbar">
     <div class="app-brand">🎓 PTN<span>Match</span></div>
-    <div class="light-badge">☀️ Light Mode</div>
+    <div class="light-badge">☀️ Light Theme</div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -304,7 +310,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ==========================================
-# 5. INPUT FORM (PRESISI TEMA TERANG)
+# 5. INPUT FORM (CARD NYATU & PRESISI)
 # ==========================================
 col_s1, col_s2 = st.columns(2, gap="small")
 
@@ -389,7 +395,7 @@ if btn_hitung:
             <div class="result-hero-label">{target['NAMA_PTN']} — {target['NAMA_PRODI']}</div>
             <div class="result-hero-value">{peluang}%</div>
             <div class="badge-status {status_class}">{status_label}</div>
-            <p style="color:var(--text-secondary); font-size:0.85rem; margin-top:12px;"><b>{kuota}</b> kuota diperebutkan oleh <b>{peminat:,}</b> peminat</p>
+            <p style="color:var(--text-secondary); font-size:0.88rem; margin-top:14px;"><b>{kuota}</b> kuota diperebutkan oleh <b>{peminat:,}</b> peminat</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -421,14 +427,14 @@ if btn_hitung:
         st.markdown(f"""
         <div class="insight-card">
             <h4 style="margin:0 0 6px 0; font-weight:700; font-size:0.95rem; color:var(--text-primary);">💡 Analisis Peluang</h4>
-            <p style="color:var(--text-secondary); font-size:0.88rem; line-height:1.5; margin:0;">
-                Rasio persaingan prodi ini adalah <b>1 : {rasio}</b>. Setiap 1 kursi diperebutkan oleh {rasio} pendaftar. 
-                Pertimbangkan prodi alternatif dengan rasio lebih longgar di bawah ini sebagai opsi aman.
+            <p style="color:var(--text-secondary); font-size:0.88rem; line-height:1.55; margin:0;">
+                Rasio persaingan prodi ini adalah <b>1 : {rasio}</b>. Artinya setiap 1 kursi diperebutkan oleh {rasio} pendaftar. 
+                Pertimbangkan prodi alternatif dengan peluang lebih aman di bawah ini.
             </p>
         </div>
         """, unsafe_allow_html=True)
 
-        st.markdown("""<h4 style="font-weight:700; font-size:1rem; margin-top:1.5rem; margin-bottom:0.5rem;">Opsi Prodi Lain di PTN Ini</h4>""", unsafe_allow_html=True)
+        st.markdown("""<h4 style="font-weight:700; font-size:1rem; margin-top:1.5rem; margin-bottom:0.5rem; color:var(--text-primary);">Opsi Prodi Lain di PTN Ini</h4>""", unsafe_allow_html=True)
 
         alt_df = filtered_prodi_df.sort_values(by='PELUANG_PERSEN', ascending=False)
 
