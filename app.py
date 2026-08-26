@@ -28,7 +28,7 @@ CUSTOM_CSS = """
     .block-container {
         padding-top: 1.5rem !important;
         padding-bottom: 3rem !important;
-        max-width: 900px !important; /* Dibuat lebih ramping agar fokus di tengah */
+        max-width: 900px !important;
     }
 
     /* Custom Navbar */
@@ -230,10 +230,11 @@ CUSTOM_CSS = """
         .app-nav-links { display: none; }
     }
 </style>
-""", unsafe_allow_html=True)
+"""
+st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
 # ==========================================
-# 3. BACKEND DATA LOGIC (100% UTUH)
+# 3. BACKEND DATA LOGIC
 # ==========================================
 @st.cache_data
 def load_data():
@@ -445,7 +446,7 @@ if btn_hitung:
             }
         )
 
-# Disclaimer Footer
+# Disclaimer Footer (Perbaikan Baris 233)
 st.markdown("""
 <div class="disclaimer-box">
     ⚠️ Hasil ini merupakan simulasi berdasarkan data peminat dan daya tampung yang tersedia, bukan jaminan kelulusan resmi.
