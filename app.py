@@ -133,7 +133,11 @@ def load_data():
     )
     return df
 
-df = load_data()
+try:
+    df = load_data()
+except Exception as e:
+    st.error(f"⚠️ Gagal memuat data `MASTER_all_prodi.csv`. Pastikan file berada di direktori yang sama.\n\n*Error: {e}*")
+    st.stop()
 
 # 4. Banner Header Utama
 st.markdown("""
@@ -186,6 +190,9 @@ if btn_hitung:
         peminat = target['PEMINAT_2025']
         peluang = target['PELUANG_PERSEN']
         rasio = target['RASIO_PERSAINGAN']
+        
+        # Format angka peminat dengan pemisah titik (gaya Indonesia)
+        peminat_formatted = f"{peminat:,}".replace(",", ".")
 
         # Header Hasil & Metadata
         st.markdown(f"## 📌 {target['NAMA_PRODI']} ({target['JENJANG']})")
@@ -212,7 +219,7 @@ if btn_hitung:
             st.markdown(f"""
             <div class="stat-card">
                 <div class="stat-label">👥 Peminat Lalu</div>
-                <div class="stat-value">{peminat:,} <span style="font-size: 1rem; color: #64748B;">Siswa</span></div>
+                <div class="stat-value">{peminat_formatted} <span style="font-size: 1rem; color: #64748B;">Siswa</span></div>
             </div>
             """, unsafe_allow_html=True)
             
