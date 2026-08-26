@@ -2,7 +2,7 @@ import pandas as pd
 import streamlit as st
 
 # ==========================================
-# 1. INITIALIZATION & STREAMLIT CONFIG
+# 1. PAGE CONFIG
 # ==========================================
 st.set_page_config(
     page_title="PTNMatch — Analisis Peluang & Rasio PTN",
@@ -12,261 +12,233 @@ st.set_page_config(
 )
 
 # ==========================================
-# 2. STRICT OVERRIDE FOR SELECTBOX & DATAFRAME
+# 2. CLEAN & STABLE MODERN LIGHT THEME CSS
 # ==========================================
-STRICT_LIGHT_CSS = """
+CLEAN_UI_CSS = """
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-    /* OVERRIDE GLOBAL CONTAINER */
-    html, body, [data-testid="stApp"], [data-testid="stAppViewContainer"], .main, .stApp {
+    /* BASE APP LAYOUT */
+    html, body, [data-testid="stAppViewContainer"], .main {
         background-color: #F8FAFC !important;
-        color: #0F172A !important;
         font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
     }
-
+    
     #MainMenu, footer, header, [data-testid="stHeader"] { 
-        visibility: hidden !important; 
-        height: 0 !important; 
+        display: none !important; 
     }
 
     .block-container {
-        padding-top: 1.5rem !important;
+        padding-top: 2rem !important;
         padding-bottom: 3rem !important;
         max-width: 800px !important;
-        background-color: #F8FAFC !important;
     }
 
-    /* NAVBAR */
+    /* BRANDING NAVBAR */
     .app-navbar {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        padding: 0.75rem 0;
-        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        margin-bottom: 1.5rem;
         border-bottom: 1px solid #E2E8F0;
     }
     .app-brand {
-        font-size: 1.3rem;
+        font-size: 1.25rem;
         font-weight: 800;
-        letter-spacing: -0.5px;
-        color: #0F172A !important;
-        display: flex;
-        align-items: center;
-        gap: 8px;
+        color: #0F172A;
     }
     .app-brand span { color: #2563EB; }
 
     /* HERO SECTION */
     .hero-container {
         text-align: center;
-        margin: 0.5rem 0 2rem 0;
+        margin-bottom: 2rem;
     }
     .hero-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
+        display: inline-block;
         background: #EFF6FF;
         color: #2563EB;
         padding: 6px 16px;
         border-radius: 99px;
-        font-size: 0.78rem;
+        font-size: 0.75rem;
         font-weight: 700;
-        margin-bottom: 0.8rem;
+        margin-bottom: 1rem;
         border: 1px solid #DBEAFE;
     }
     .hero-title {
         font-size: 2.1rem;
         font-weight: 800;
+        color: #0F172A;
         line-height: 1.25;
-        letter-spacing: -0.7px;
-        color: #0F172A !important;
-        margin-bottom: 0.6rem;
+        margin-bottom: 0.5rem;
     }
     .hero-subtitle {
         font-size: 0.95rem;
-        color: #64748B !important;
-        line-height: 1.55;
-        max-width: 560px;
+        color: #64748B;
+        max-width: 520px;
         margin: 0 auto;
+        line-height: 1.5;
     }
 
-    /* CARD INPUT WRAPPER */
-    .input-card {
-        background: #FFFFFF !important;
-        border: 1px solid #E2E8F0 !important;
-        border-radius: 16px;
-        padding: 18px 20px;
-        box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03);
-        margin-bottom: 1rem;
+    /* STEP HEADER CARDS */
+    .step-box {
+        background: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        border-radius: 12px;
+        padding: 12px 16px;
+        margin-bottom: 8px;
     }
-    .step-header {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 0.3rem;
-    }
-    .step-num {
+    .step-badge {
         background: #EFF6FF;
         color: #2563EB;
-        font-size: 0.72rem;
+        font-size: 0.7rem;
         font-weight: 800;
-        padding: 3px 8px;
-        border-radius: 6px;
+        padding: 2px 6px;
+        border-radius: 4px;
+        margin-right: 6px;
     }
     .step-title {
-        font-size: 0.92rem;
-        font-weight: 700;
-        color: #0F172A !important;
-    }
-    .step-desc {
-        font-size: 0.82rem;
-        color: #64748B !important;
-        margin-bottom: 0.8rem;
-    }
-
-    /* FIX TOTAL DARI DROPDOWN / SELECTBOX */
-    div[data-baseweb="select"] {
-        background-color: #F1F5F9 !important;
-        border-radius: 10px !important;
-    }
-    div[data-baseweb="select"] > div {
-        background-color: #F1F5F9 !important;
-        border: 1px solid #CBD5E1 !important;
-        border-radius: 10px !important;
-        color: #0F172A !important;
-    }
-    div[data-baseweb="select"] [data-testid="stMarkdownContainer"] p,
-    div[data-baseweb="select"] span,
-    div[data-baseweb="select"] input {
-        color: #0F172A !important;
-    }
-    div[data-baseweb="select"] svg {
-        fill: #0F172A !important;
-    }
-
-    /* FIX BUTTON ACTION */
-    div.stButton > button {
-        background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
-        color: #FFFFFF !important;
-        font-weight: 700 !important;
-        font-size: 1rem !important;
-        height: 50px !important;
-        border-radius: 12px !important;
-        border: none !important;
-        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25) !important;
-        transition: all 0.2s ease !important;
-    }
-    div.stButton > button:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35) !important;
-    }
-
-    /* RESULT HERO CARD */
-    .result-hero {
-        background: #FFFFFF !important;
-        border: 1px solid #E2E8F0 !important;
-        border-radius: 20px;
-        padding: 26px 20px;
-        text-align: center;
-        box-shadow: 0 10px 25px -3px rgba(15, 23, 42, 0.06);
-        margin: 1.5rem 0 1rem 0;
-    }
-    .result-hero-label {
-        font-size: 0.8rem;
-        font-weight: 700;
-        color: #64748B !important;
-        text-transform: uppercase;
-        letter-spacing: 0.8px;
-    }
-    .result-hero-value {
-        font-size: 3.6rem;
-        font-weight: 800;
-        color: #2563EB !important;
-        letter-spacing: -1.5px;
-        line-height: 1.1;
-        margin: 8px 0;
-    }
-    .badge-status {
-        display: inline-block;
-        padding: 5px 16px;
-        border-radius: 99px;
-        font-weight: 700;
         font-size: 0.85rem;
-    }
-    .status-ketat { background: #FEF2F2 !important; color: #EF4444 !important; border: 1px solid #FCA5A5 !important; }
-    .status-sedang { background: #FFFBEB !important; color: #D97706 !important; border: 1px solid #FCD34D !important; }
-    .status-longgar { background: #F0FDF4 !important; color: #16A34A !important; border: 1px solid #86EFAC !important; }
-
-    /* METRICS */
-    .metric-card {
-        background: #FFFFFF !important;
-        border: 1px solid #E2E8F0 !important;
-        border-radius: 14px;
-        padding: 16px;
-        text-align: center;
-        box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03);
-    }
-    .metric-title {
-        font-size: 0.72rem;
         font-weight: 700;
-        color: #64748B !important;
-        text-transform: uppercase;
+        color: #0F172A;
     }
-    .metric-val {
-        font-size: 1.35rem;
-        font-weight: 800;
-        color: #0F172A !important;
+    .step-sub {
+        font-size: 0.78rem;
+        color: #64748B;
         margin-top: 2px;
     }
 
-    /* INSIGHT CARD */
-    .insight-card {
-        background: #FFFFFF !important;
-        border: 1px solid #E2E8F0 !important;
+    /* BUTTON CUSTOMIZATION */
+    div.stButton > button {
+        background: #2563EB !important;
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+        font-size: 0.95rem !important;
+        height: 48px !important;
+        border-radius: 10px !important;
+        border: none !important;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2) !important;
+        margin-top: 10px;
+    }
+    div.stButton > button:hover {
+        background: #1D4ED8 !important;
+    }
+
+    /* RESULT HERO CARD */
+    .result-card {
+        background: #FFFFFF;
+        border: 1px solid #E2E8F0;
         border-radius: 16px;
-        padding: 20px;
-        margin: 1rem 0;
-        box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03);
-    }
-
-    /* PAKSA ST.DATAFRAME JADI TERANG TOTAL */
-    div[data-testid="stDataFrame"] {
-        background-color: #FFFFFF !important;
-        border: 1px solid #E2E8F0 !important;
-        border-radius: 12px !important;
-    }
-    div[data-testid="stDataFrame"] iframe {
-        color-scheme: light !important;
-    }
-    div[data-testid="stDataFrame"] * {
-        background-color: #FFFFFF !important;
-        color: #0F172A !important;
-    }
-
-    /* FOOTER */
-    .disclaimer-box {
-        font-size: 0.8rem;
-        color: #64748B !important;
+        padding: 24px;
         text-align: center;
-        margin-top: 2.5rem;
-        padding-top: 1.2rem;
-        border-top: 1px solid #E2E8F0;
+        margin: 1.5rem 0 1rem 0;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+    .result-sub {
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: #64748B;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .result-val {
+        font-size: 3.5rem;
+        font-weight: 800;
+        color: #2563EB;
+        line-height: 1.1;
+        margin: 8px 0;
+    }
+    
+    .badge-status {
+        display: inline-block;
+        padding: 4px 14px;
+        border-radius: 99px;
+        font-weight: 700;
+        font-size: 0.8rem;
+    }
+    .status-ketat { background: #FEF2F2; color: #EF4444; border: 1px solid #FCA5A5; }
+    .status-sedang { background: #FFFBEB; color: #D97706; border: 1px solid #FCD34D; }
+    .status-longgar { background: #F0FDF4; color: #16A34A; border: 1px solid #86EFAC; }
+
+    /* METRIC CARDS */
+    .metric-card {
+        background: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        border-radius: 12px;
+        padding: 14px;
+        text-align: center;
+    }
+    .metric-head {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: #64748B;
+    }
+    .metric-body {
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: #0F172A;
+        margin-top: 2px;
     }
 
-    /* MOBILE OPTIMIZATION */
-    @media (max-width: 640px) {
-        .hero-title { font-size: 1.55rem; }
-        .hero-subtitle { font-size: 0.85rem; }
-        .result-hero-value { font-size: 2.8rem; }
-        .block-container { padding-left: 1rem !important; padding-right: 1rem !important; }
+    /* INSIGHT BOX */
+    .insight-box {
+        background: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        border-radius: 12px;
+        padding: 16px;
+        margin: 1rem 0;
+        font-size: 0.88rem;
+        color: #475569;
+        line-height: 1.5;
+    }
+
+    /* CUSTOM STABLE HTML TABLE */
+    .custom-table-container {
+        background: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        border-radius: 12px;
+        overflow-x: auto;
+        margin-top: 10px;
+    }
+    table.custom-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+        text-align: left;
+    }
+    table.custom-table th {
+        background-color: #F8FAFC;
+        color: #475569;
+        font-weight: 700;
+        padding: 12px 14px;
+        border-bottom: 1px solid #E2E8F0;
+    }
+    table.custom-table td {
+        padding: 12px 14px;
+        border-bottom: 1px solid #F1F5F9;
+        color: #0F172A;
+    }
+    table.custom-table tr:last-child td {
+        border-bottom: none;
+    }
+    table.custom-table tr:hover {
+        background-color: #F8FAFC;
+    }
+
+    .disclaimer {
+        text-align: center;
+        font-size: 0.78rem;
+        color: #94A3B8;
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 1px solid #E2E8F0;
     }
 </style>
 """
-st.markdown(STRICT_LIGHT_CSS, unsafe_allow_html=True)
+st.markdown(CLEAN_UI_CSS, unsafe_allow_html=True)
 
 # ==========================================
-# 3. BACKEND DATA LOGIC
+# 3. LOAD DATA
 # ==========================================
 @st.cache_data
 def load_data():
@@ -287,16 +259,12 @@ def load_data():
 df = load_data()
 
 # ==========================================
-# 4. NAVBAR HEADER
+# 4. HEADER & HERO
 # ==========================================
 st.markdown("""
 <div class="app-navbar">
     <div class="app-brand">🎓 PTN<span>Match</span></div>
 </div>
-""", unsafe_allow_html=True)
-
-# Hero Section
-st.markdown("""
 <div class="hero-container">
     <div class="hero-badge">✨ SNBP 2026 • DATA RESMI TERKINI</div>
     <h1 class="hero-title">Seberapa kompetitif jurusan impianmu?</h1>
@@ -311,23 +279,14 @@ col_s1, col_s2 = st.columns(2, gap="small")
 
 with col_s1:
     st.markdown("""
-    <div class="input-card">
-        <div class="step-header">
-            <span class="step-num">STEP 01</span>
-            <span class="step-title">UNIVERSITAS</span>
-        </div>
-        <div class="step-desc">Mau kuliah di mana?</div>
+    <div class="step-box">
+        <span class="step-badge">STEP 01</span>
+        <span class="step-title">UNIVERSITAS</span>
+        <div class="step-sub">Mau kuliah di mana?</div>
+    </div>
     """, unsafe_allow_html=True)
-    
     list_ptn = sorted(df['NAMA_PTN'].unique())
-    selected_ptn = st.selectbox(
-        "Pilih PTN", 
-        list_ptn, 
-        index=None, 
-        placeholder="🔍 Cari universitas...",
-        label_visibility="collapsed"
-    )
-    st.markdown("</div>", unsafe_allow_html=True)
+    selected_ptn = st.selectbox("Pilih PTN", list_ptn, index=None, placeholder="🔍 Cari universitas...", label_visibility="collapsed")
 
 if selected_ptn:
     filtered_prodi_df = df[df['NAMA_PTN'] == selected_ptn]
@@ -338,14 +297,12 @@ else:
 
 with col_s2:
     st.markdown("""
-    <div class="input-card">
-        <div class="step-header">
-            <span class="step-num">STEP 02</span>
-            <span class="step-title">PROGRAM STUDI</span>
-        </div>
-        <div class="step-desc">Jurusan yang kamu incar?</div>
+    <div class="step-box">
+        <span class="step-badge">STEP 02</span>
+        <span class="step-title">PROGRAM STUDI</span>
+        <div class="step-sub">Jurusan yang kamu incar?</div>
+    </div>
     """, unsafe_allow_html=True)
-    
     selected_prodi = st.selectbox(
         "Pilih Prodi", 
         list_prodi, 
@@ -354,7 +311,6 @@ with col_s2:
         disabled=(not selected_ptn),
         label_visibility="collapsed"
     )
-    st.markdown("</div>", unsafe_allow_html=True)
 
 btn_hitung = st.button("Analisis Peluang →", use_container_width=True)
 
@@ -386,11 +342,13 @@ if btn_hitung:
             status_label = "🟢 PELUANG BESAR"
 
         st.markdown(f"""
-        <div class="result-hero">
-            <div class="result-hero-label">{target['NAMA_PTN']} — {target['NAMA_PRODI']}</div>
-            <div class="result-hero-value">{peluang}%</div>
+        <div class="result-card">
+            <div class="result-sub">{target['NAMA_PTN']} — {target['NAMA_PRODI']}</div>
+            <div class="result-val">{peluang}%</div>
             <div class="badge-status {status_class}">{status_label}</div>
-            <p style="color:#64748B; font-size:0.88rem; margin-top:12px;"><b>{kuota}</b> kuota diperebutkan oleh <b>{peminat:,}</b> peminat</p>
+            <p style="color:#64748B; font-size:0.85rem; margin-top:10px; margin-bottom:0;">
+                <b>{kuota}</b> kuota diperebutkan oleh <b>{peminat:,}</b> peminat
+            </p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -398,59 +356,76 @@ if btn_hitung:
         with mc1:
             st.markdown(f"""
             <div class="metric-card">
-                <div class="metric-title">🪑 KUOTA 2026</div>
-                <div class="metric-val">{kuota}</div>
+                <div class="metric-head">🪑 KUOTA 2026</div>
+                <div class="metric-body">{kuota}</div>
             </div>
             """, unsafe_allow_html=True)
-
         with mc2:
             st.markdown(f"""
             <div class="metric-card">
-                <div class="metric-title">👥 PEMINAT 2025</div>
-                <div class="metric-val">{peminat:,}</div>
+                <div class="metric-head">👥 PEMINAT 2025</div>
+                <div class="metric-body">{peminat:,}</div>
             </div>
             """, unsafe_allow_html=True)
-
         with mc3:
             st.markdown(f"""
             <div class="metric-card">
-                <div class="metric-title">🔥 RASIO</div>
-                <div class="metric-val">1 : {rasio}</div>
+                <div class="metric-head">🔥 RASIO</div>
+                <div class="metric-body">1 : {rasio}</div>
             </div>
             """, unsafe_allow_html=True)
 
         st.markdown(f"""
-        <div class="insight-card">
-            <h4 style="margin:0 0 6px 0; font-weight:700; font-size:0.95rem; color:#0F172A;">💡 Analisis Peluang</h4>
-            <p style="color:#64748B; font-size:0.88rem; line-height:1.55; margin:0;">
-                Rasio persaingan prodi ini adalah <b>1 : {rasio}</b>. Setiap 1 kursi diperebutkan oleh {rasio} pendaftar. 
-                Pertimbangkan prodi alternatif dengan rasio lebih longgar di bawah ini sebagai opsi aman.
-            </p>
+        <div class="insight-box">
+            <b style="color:#0F172A;">💡 Analisis Peluang:</b><br>
+            Rasio persaingan prodi ini adalah <b>1 : {rasio}</b> (Setiap 1 kursi diperebutkan oleh {rasio} pendaftar). 
+            Pertimbangkan prodi alternatif dengan rasio lebih longgar di bawah ini sebagai opsi aman.
         </div>
         """, unsafe_allow_html=True)
 
-        st.markdown("""<h4 style="font-weight:700; font-size:1rem; margin-top:1.5rem; margin-bottom:0.5rem; color:#0F172A;">Opsi Prodi Lain di PTN Ini</h4>""", unsafe_allow_html=True)
+        st.markdown("""<h4 style="font-size:0.95rem; font-weight:700; color:#0F172A; margin-top:1.5rem;">Opsi Prodi Lain di PTN Ini</h4>""", unsafe_allow_html=True)
 
+        # TABEL NATIVE HTML UNTUK TAMPILAN 100% STABIL & BEBAS DARK-MODE BUG
         alt_df = filtered_prodi_df.sort_values(by='PELUANG_PERSEN', ascending=False)
+        
+        table_html = """
+        <div class="custom-table-container">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Kode</th>
+                        <th>Program Studi</th>
+                        <th>Jenjang</th>
+                        <th>Kuota 2026</th>
+                        <th>Peminat 2025</th>
+                        <th>Peluang (%)</th>
+                        <th>Rasio</th>
+                    </tr>
+                </thead>
+                <tbody>
+        """
+        for _, row in alt_df.iterrows():
+            table_html += f"""
+                <tr>
+                    <td><b>{row['KODE_PRODI']}</b></td>
+                    <td>{row['NAMA_PRODI']}</td>
+                    <td>{row['JENJANG']}</td>
+                    <td>{row['DAYA_TAMPUNG_2026']} Kursi</td>
+                    <td>{row['PEMINAT_2025']:,}</td>
+                    <td><b>{row['PELUANG_PERSEN']}%</b></td>
+                    <td>1 : {row['RASIO_PERSAINGAN']}</td>
+                </tr>
+            """
+        table_html += """
+                </tbody>
+            </table>
+        </div>
+        """
+        st.markdown(table_html, unsafe_allow_html=True)
 
-        st.dataframe(
-            alt_df[['KODE_PRODI', 'NAMA_PRODI', 'JENJANG', 'DAYA_TAMPUNG_2026', 'PEMINAT_2025', 'PELUANG_PERSEN', 'RASIO_PERSAINGAN']],
-            use_container_width=True,
-            hide_index=True,
-            column_config={
-                "KODE_PRODI": st.column_config.TextColumn("Kode"),
-                "NAMA_PRODI": st.column_config.TextColumn("Program Studi"),
-                "JENJANG": st.column_config.TextColumn("Jenjang"),
-                "DAYA_TAMPUNG_2026": st.column_config.NumberColumn("Daya Tampung", format="%d Kursi"),
-                "PEMINAT_2025": st.column_config.NumberColumn("Peminat", format="%d"),
-                "PELUANG_PERSEN": st.column_config.ProgressColumn("Peluang (%)", format="%.2f%%", min_value=0, max_value=100),
-                "RASIO_PERSAINGAN": st.column_config.NumberColumn("Rasio", format="1 : %d")
-            }
-        )
-
-# Disclaimer Footer
+# FOOTER
 st.markdown("""
-<div class="disclaimer-box">
+<div class="disclaimer">
     ⚠️ Data berdasarkan simulasi estimasi resmi. Hasil ini bukan jaminan kelulusan mutlak.
 </div>
 """, unsafe_allow_html=True)
