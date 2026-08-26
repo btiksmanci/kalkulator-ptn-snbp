@@ -28,20 +28,28 @@ def load_data():
 
 df = load_data()
 
-# Header & Deskripsi
+# Header Utama
 st.title("🎓 Kalkulator Rasio Persaingan & Peluang PTN")
 st.markdown("Cek persentase peluang lulus dan rasio ketatnya persaingan jurusan targetmu berdasarkan data resmi Daya Tampung & Peminat.")
 st.divider()
 
-# Input Fitur Pencarian / Filter Jurusan
-st.sidebar.header("🔍 Cari Jurusan Target")
+# --- FORM PENCARIAN DI HALAMAN UTAMA (Bukan Sidebar) ---
+st.subheader("🔍 Cari & Pilih Jurusan Target")
 
-list_ptn = sorted(df['NAMA_PTN'].unique())
-selected_ptn = st.sidebar.selectbox("1. Pilih Universitas / PTN", list_ptn)
+col_search1, col_search2 = st.columns(2)
 
+with col_search1:
+    list_ptn = sorted(df['NAMA_PTN'].unique())
+    selected_ptn = st.selectbox("1. Pilih Universitas / PTN", list_ptn)
+
+# Filter prodi berdasarkan PTN pilihan
 filtered_prodi_df = df[df['NAMA_PTN'] == selected_ptn]
 list_prodi = sorted(filtered_prodi_df['NAMA_PRODI'].unique())
-selected_prodi = st.sidebar.selectbox("2. Pilih Program Studi", list_prodi)
+
+with col_search2:
+    selected_prodi = st.selectbox("2. Pilih Program Studi", list_prodi)
+
+st.divider()
 
 # Ambil data spesifik jurusan terpilih
 target = filtered_prodi_df[filtered_prodi_df['NAMA_PRODI'] == selected_prodi].iloc[0]
