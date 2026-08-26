@@ -12,305 +12,309 @@ st.set_page_config(
 )
 
 # ==========================================
-# 2. DESIGN SYSTEM & CSS modern UI
+# 2. DESIGN SYSTEM & MODERN STYLING (SINGLE LIGHT THEME)
 # ==========================================
-STYLING_CSS = """
+MODERN_THEME_CSS = """
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-    /* Global Reset & Base Styling */
+    /* BASE CONTAINER OVERRIDE */
     html, body, [data-testid="stAppViewContainer"], .main {
         background-color: #F8FAFC !important;
         font-family: 'Plus Jakarta Sans', sans-serif !important;
-        color: #1E293B !important;
+        color: #0F172A !important;
     }
 
-    /* Sembunyikan Header bawaan Streamlit */
     #MainMenu, footer, header, [data-testid="stHeader"] { 
         display: none !important; 
     }
 
-    /* Container Margin */
     .block-container {
         padding-top: 2rem !important;
         padding-bottom: 4rem !important;
-        max-width: 900px !important;
+        max-width: 860px !important;
     }
 
-    /* Top Navigation / Brand Banner */
-    .top-nav {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 12px 0;
+    /* HEADER & BRANDING */
+    .brand-header {
+        text-align: center;
         margin-bottom: 2rem;
-        border-bottom: 1px solid #E2E8F0;
     }
     .brand-logo {
-        font-size: 1.3rem;
-        font-weight: 800;
-        color: #0F172A;
-        letter-spacing: -0.5px;
-    }
-    .brand-logo span { color: #3B82F6; }
-    .nav-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
         background: #EFF6FF;
         color: #2563EB;
-        font-size: 0.75rem;
-        font-weight: 700;
-        padding: 4px 12px;
-        border-radius: 99px;
-        border: 1px solid #BFDBFE;
-    }
-
-    /* Hero Section */
-    .hero-box {
-        text-align: center;
-        margin-bottom: 2.5rem;
-    }
-    .hero-title {
-        font-size: 2.3rem;
         font-weight: 800;
-        color: #0F172A;
-        letter-spacing: -0.5px;
-        line-height: 1.25;
-        margin-bottom: 0.75rem;
+        font-size: 0.85rem;
+        padding: 6px 16px;
+        border-radius: 99px;
+        border: 1px solid #DBEAFE;
+        margin-bottom: 0.8rem;
     }
-    .hero-subtitle {
-        font-size: 1rem;
+    .brand-title {
+        font-size: 2.2rem;
+        font-weight: 800;
+        letter-spacing: -0.8px;
+        color: #0F172A;
+        line-height: 1.25;
+        margin-bottom: 0.5rem;
+    }
+    .brand-subtitle {
+        font-size: 0.95rem;
         color: #64748B;
         max-width: 540px;
         margin: 0 auto;
-        line-height: 1.6;
+        line-height: 1.5;
     }
 
-    /* Form Container Card */
-    .form-card {
+    /* CARD CONTAINER UNTUK FORM & METRICS */
+    .card-box {
         background: #FFFFFF;
         border: 1px solid #E2E8F0;
-        border-radius: 20px;
+        border-radius: 16px;
         padding: 24px;
-        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.04);
-        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03);
+        margin-bottom: 1.25rem;
     }
 
-    /* Button Styling */
+    /* LABEL SELECTBOX DIBUAT MODERN */
+    .input-label {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #334155;
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    /* CUSTOM STYLED BUTTON */
     div.stButton > button {
         background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
         color: #FFFFFF !important;
         font-weight: 700 !important;
         font-size: 1rem !important;
-        height: 50px !important;
+        height: 52px !important;
         border-radius: 12px !important;
         border: none !important;
-        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35) !important;
+        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25) !important;
         transition: all 0.2s ease !important;
+        margin-top: 0.5rem;
     }
     div.stButton > button:hover {
         transform: translateY(-1px);
-        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45) !important;
+        box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35) !important;
     }
 
-    /* Main Target Result Box */
-    .target-box {
+    /* HERO RESULT CARD */
+    .hero-result {
         background: #FFFFFF;
         border: 1px solid #E2E8F0;
         border-radius: 20px;
-        padding: 28px;
+        padding: 28px 20px;
         text-align: center;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-        margin-bottom: 1.5rem;
+        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05);
+        margin-top: 1.5rem;
+        margin-bottom: 1.25rem;
     }
-    .target-header {
+    .hero-target {
         font-size: 0.85rem;
         font-weight: 700;
         color: #64748B;
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
-    .target-title {
-        font-size: 1.4rem;
-        font-weight: 800;
-        color: #0F172A;
-        margin: 4px 0 16px 0;
-    }
-    .chance-number {
+    .hero-percent {
         font-size: 3.8rem;
         font-weight: 800;
         color: #2563EB;
         line-height: 1;
-        margin-bottom: 12px;
+        letter-spacing: -1.5px;
+        margin: 12px 0;
     }
-    
-    /* Status Badges */
+
+    /* STATUS BADGES */
     .status-pill {
         display: inline-block;
-        padding: 6px 16px;
+        padding: 6px 18px;
         border-radius: 99px;
         font-weight: 700;
-        font-size: 0.82rem;
-        letter-spacing: 0.3px;
+        font-size: 0.85rem;
     }
-    .status-ketat { background: #FEF2F2; color: #DC2626; border: 1px solid #FCA5A5; }
-    .status-sedang { background: #FFFBEB; color: #D97706; border: 1px solid #FCD34D; }
-    .status-longgar { background: #F0FDF4; color: #16A34A; border: 1px solid #86EFAC; }
+    .status-sangat-ketat { background: #FEF2F2; color: #DC2626; border: 1px solid #FCA5A5; }
+    .status-ketat { background: #FFF7ED; color: #EA580C; border: 1px solid #FDBA74; }
+    .status-sedang { background: #FEFCE8; color: #CA8A04; border: 1px solid #FDE047; }
+    .status-aman { background: #F0FDF4; color: #16A34A; border: 1px solid #86EFAC; }
 
-    /* Key Statistics Cards */
-    .grid-stats {
+    /* MINI METRICS CARD */
+    .metric-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: repeat(3, 1fr);
         gap: 12px;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.25rem;
     }
-    .stat-item {
+    .metric-item {
         background: #FFFFFF;
         border: 1px solid #E2E8F0;
         border-radius: 14px;
         padding: 16px;
         text-align: center;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     }
-    .stat-label {
+    .metric-item-label {
         font-size: 0.75rem;
         font-weight: 700;
         color: #64748B;
         text-transform: uppercase;
     }
-    .stat-val {
-        font-size: 1.5rem;
+    .metric-item-val {
+        font-size: 1.35rem;
         font-weight: 800;
         color: #0F172A;
         margin-top: 4px;
     }
 
-    /* Analysis / Insight Box */
+    /* INSIGHT BOX */
     .insight-card {
         background: #F8FAFC;
         border: 1px solid #E2E8F0;
-        border-left: 4px solid #2563EB;
-        border-radius: 12px;
-        padding: 16px 20px;
+        border-radius: 14px;
+        padding: 18px;
         font-size: 0.9rem;
         color: #334155;
         line-height: 1.6;
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
     }
 
-    /* Custom Responsive Table */
-    .table-card {
+    /* TABLE STYLES (PURE HTML - NEVER FAILS) */
+    .table-section-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #0F172A;
+        margin-bottom: 0.75rem;
+    }
+    .custom-table-card {
         background: #FFFFFF;
         border: 1px solid #E2E8F0;
-        border-radius: 16px;
-        overflow-x: auto;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
     }
-    table.clean-table {
+    table.data-table {
         width: 100%;
         border-collapse: collapse;
         font-size: 0.88rem;
         text-align: left;
     }
-    table.clean-table th {
-        background-color: #F8FAFC;
+    table.data-table th {
+        background: #F8FAFC;
         color: #475569;
         font-weight: 700;
         padding: 14px 16px;
         border-bottom: 1px solid #E2E8F0;
     }
-    table.clean-table td {
+    table.data-table td {
         padding: 14px 16px;
         border-bottom: 1px solid #F1F5F9;
         color: #0F172A;
     }
-    table.clean-table tr:last-child td {
+    table.data-table tr:last-child td {
         border-bottom: none;
     }
-    table.clean-table tr:hover {
+    table.data-table tr:hover {
         background-color: #F8FAFC;
     }
+
+    /* RESPONSIVE DESIGN */
+    @media (max-width: 640px) {
+        .brand-title { font-size: 1.6rem; }
+        .hero-percent { font-size: 3rem; }
+        .metric-grid { grid-template-columns: 1fr; }
+    }
 </style>
-"""
-st.markdown(STYLING_CSS, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
+
+st.markdown(MODERN_THEME_CSS, unsafe_allow_html=True)
 
 # ==========================================
-# 3. KONEKSI & OLAHI DATA CSV
+# 3. KONEKSI KODE DAN PEMROSESAN DATA
 # ==========================================
 @st.cache_data
-def load_data():
+def get_clean_data():
     df = pd.read_csv('MASTER_all_prodi.csv', sep=';', on_bad_lines='skip')
+    
     df['DAYA_TAMPUNG_2026'] = pd.to_numeric(df['DAYA_TAMPUNG_2026'], errors='coerce').fillna(0).astype(int)
     df['PEMINAT_2025'] = pd.to_numeric(df['PEMINAT_2025'], errors='coerce').fillna(0).astype(int)
     
-    # Kalkulasi Peluang %
     df['PELUANG_PERSEN'] = df.apply(
         lambda r: round((r['DAYA_TAMPUNG_2026'] / r['PEMINAT_2025']) * 100, 2) if r['PEMINAT_2025'] > 0 else 0.0, 
         axis=1
     )
-    # Kalkulasi Rasio (1 : N)
     df['RASIO_PERSAINGAN'] = df.apply(
         lambda r: int(round(r['PEMINAT_2025'] / r['DAYA_TAMPUNG_2026'])) if r['DAYA_TAMPUNG_2026'] > 0 else 0,
         axis=1
     )
     return df
 
-try:
-    df = load_data()
-except Exception as e:
-    st.error("⚠️ Gagal memuat file `MASTER_all_prodi.csv`. Pastikan file berada di direktori yang sama.")
-    st.stop()
+df = get_clean_data()
 
 # ==========================================
-# 4. TOP BAR & HERO SECTION
+# 4. BRANDING HEADER
 # ==========================================
 st.markdown("""
-<div class="top-nav">
-    <div class="brand-logo">🎓 PTN<span>Match</span></div>
-    <div class="nav-badge">SNBP 2026</div>
-</div>
-<div class="hero-box">
-    <h1 class="hero-title">Berapa besar peluang kelulusanmu?</h1>
-    <p class="hero-subtitle">Analisis rasio persaingan dan keketatan jurusan impian berdasarkan data daya tampung resmi.</p>
+<div class="brand-header">
+    <div class="brand-logo">🎓 PTNMatch</div>
+    <h1 class="brand-title">Cek Peluang Kelulusan SNBP</h1>
+    <p class="brand-subtitle">Analisis rasio keketatan dan peta persaingan jurusan impianmu berbasis data acuan resmi.</p>
 </div>
 """, unsafe_allow_html=True)
 
 # ==========================================
-# 5. INPUT PENCARIAN (CARD CONTAINER)
+# 5. INPUT SELECTION AREA
 # ==========================================
-st.markdown('<div class="form-card">', unsafe_allow_html=True)
-c1, c2 = st.columns(2, gap="medium")
+st.markdown('<div class="card-box">', unsafe_allow_html=True)
 
-with c1:
-    list_ptn = sorted(df['NAMA_PTN'].unique())
+col_ptn, col_prodi = st.columns(2, gap="medium")
+
+with col_ptn:
+    st.markdown('<div class="input-label">🏛️ Pilih Universitas (PTN)</div>', unsafe_allow_html=True)
+    ptn_options = sorted(df['NAMA_PTN'].unique())
     selected_ptn = st.selectbox(
-        "🏫 Universitas (PTN)", 
-        list_ptn, 
-        index=None, 
-        placeholder="Cari Kampus..."
+        "Pilih PTN",
+        ptn_options,
+        index=None,
+        placeholder="Cari universitas...",
+        label_visibility="collapsed"
     )
 
 if selected_ptn:
     filtered_prodi_df = df[df['NAMA_PTN'] == selected_ptn]
-    list_prodi = sorted(filtered_prodi_df['NAMA_PRODI'].unique())
+    prodi_options = sorted(filtered_prodi_df['NAMA_PRODI'].unique())
 else:
     filtered_prodi_df = pd.DataFrame()
-    list_prodi = []
+    prodi_options = []
 
-with c2:
+with col_prodi:
+    st.markdown('<div class="input-label">📚 Pilih Program Studi (Jurusan)</div>', unsafe_allow_html=True)
     selected_prodi = st.selectbox(
-        "📚 Program Studi (Jurusan)", 
-        list_prodi, 
-        index=None, 
-        placeholder="Pilih Kampus dahulu..." if not selected_ptn else "Cari Jurusan...",
-        disabled=(not selected_ptn)
+        "Pilih Prodi",
+        prodi_options,
+        index=None,
+        placeholder="Pilih universitas terlebih dahulu" if not selected_ptn else "Cari jurusan...",
+        disabled=(not selected_ptn),
+        label_visibility="collapsed"
     )
 
-st.write("")
-btn_hitung = st.button("Hitung Peluang Sekarang →", use_container_width=True)
+btn_analyze = st.button("Hitung Peluang Sekarang →", use_container_width=True)
+
 st.markdown('</div>', unsafe_allow_html=True)
 
 # ==========================================
-# 6. DASHBOARD HASIL ANALISIS
+# 6. RESULTS & DASHBOARD DISPLAY
 # ==========================================
-if btn_hitung:
+if btn_analyze:
     if not selected_ptn or not selected_prodi:
         st.warning("⚠️ Silakan tentukan **Universitas** dan **Program Studi** terlebih dahulu.")
     else:
@@ -321,115 +325,100 @@ if btn_hitung:
         peluang = target['PELUANG_PERSEN']
         rasio = target['RASIO_PERSAINGAN']
 
-        # Klasifikasi Keketatan
-        if peluang < 5.0:
-            status_class = "status-ketat"
-            status_label = "🔴 SANGAT KETAT"
-            desc_text = f"Peluang lulus kamu tergolong sangat kecil. Setiap 1 kursi diperebutkan oleh <b>{rasio} pendaftar</b>."
+        # Klasifikasi Status Keketatan
+        if peminat == 0:
+            status_class = "status-aman"
+            status_label = "🟢 PRODI BARU / BEBAS KETATAN"
+        elif peluang < 5.0:
+            status_class = "status-sangat-ketat"
+            status_label = "🔴 SANGAT KETAT (HIGH RISK)"
         elif peluang <= 15.0:
             status_class = "status-ketat"
-            status_label = "🟠 KETAT"
-            desc_text = f"Persaingan tergolong tinggi. Kamu harus menyingkirkan sekitar <b>{rasio} pesaing</b> per kursi."
+            status_label = "🟠 KETAT (FAVORIT)"
         elif peluang <= 30.0:
             status_class = "status-sedang"
-            status_label = "🟡 SEDANG / MODERAT"
-            desc_text = f"Tingkat persaingan moderat. Opsi yang cukup baik untuk dijadikan Pilihan 1 atau 2."
+            status_label = "🟡 SEDANG (MODERAT)"
         else:
-            status_class = "status-longgar"
-            status_label = "🟢 PELUANG BESAR"
-            desc_text = f"Persaingan relatif lebih aman. Sangat direkomendasikan sebagai pilihan pengaman."
+            status_class = "status-aman"
+            status_label = "🟢 PELUANG BESAR (SAFE)"
 
-        # Hero Card Output Peluang
+        # 1. Main Hero Card
         st.markdown(f"""
-        <div class="target-box">
-            <div class="target-header">{target['NAMA_PTN']} — {target['JENJANG']}</div>
-            <div class="target-title">{target['NAMA_PRODI']}</div>
-            <div class="chance-number">{peluang}%</div>
+        <div class="hero-result">
+            <div class="hero-target">{target['NAMA_PTN']} — {target['NAMA_PRODI']} ({target['JENJANG']})</div>
+            <div class="hero-percent">{peluang}%</div>
             <div class="status-pill {status_class}">{status_label}</div>
         </div>
         """, unsafe_allow_html=True)
 
-        # 3 Grid Stat Utama
-        col_m1, col_m2, col_m3 = st.columns(3)
-        with col_m1:
-            st.markdown(f"""
-            <div class="stat-item">
-                <div class="stat-label">📦 Kuota 2026</div>
-                <div class="stat-val">{kuota} <span style="font-size:0.8rem; color:#64748B;">Kursi</span></div>
-            </div>
-            """, unsafe_allow_html=True)
-        with col_m2:
-            st.markdown(f"""
-            <div class="stat-item">
-                <div class="stat-label">👥 Peminat 2025</div>
-                <div class="stat-val">{peminat:,} <span style="font-size:0.8rem; color:#64748B;">Siswa</span></div>
-            </div>
-            """, unsafe_allow_html=True)
-        with col_m3:
-            st.markdown(f"""
-            <div class="stat-item">
-                <div class="stat-label">⚖️ Rasio Kampus</div>
-                <div class="stat-val">1 : {rasio}</div>
-            </div>
-            """, unsafe_allow_html=True)
-
-        st.write("")
-
-        # Insight Box Summary
+        # 2. Metric Breakdown Grid
         st.markdown(f"""
-        <div class="insight-card">
-            <b>💡 Insights untuk kamu:</b><br>
-            {desc_text} Untuk prodi <b>{target['NAMA_PRODI']}</b>, daya tampung tahun ini adalah <b>{kuota} kursi</b> 
-            dengan total peminat tahun lalu sebanyak <b>{peminat:,} siswa</b>.
+        <div class="metric-grid">
+            <div class="metric-item">
+                <div class="metric-item-label">🪑 Kuota 2026</div>
+                <div class="metric-item-val">{kuota} <span style="font-size:0.85rem; font-weight:600; color:#64748B;">Kursi</span></div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-item-label">👥 Peminat 2025</div>
+                <div class="metric-item-val">{peminat:,} <span style="font-size:0.85rem; font-weight:600; color:#64748B;">Siswa</span></div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-item-label">⚖️ Rasio Keketatan</div>
+                <div class="metric-item-val">1 : {rasio}</div>
+            </div>
         </div>
         """, unsafe_allow_html=True)
 
-        # Tabel Pembanding Jurusan Lain
+        # 3. Actionable UX Insights
         st.markdown(f"""
-        <h3 style="font-size:1.15rem; font-weight:800; color:#0F172A; margin-top:2rem; margin-bottom:0.5rem;">
-            🔍 Alternatif Jurusan Lain di {selected_ptn}
-        </h3>
-        <p style="font-size:0.85rem; color:#64748B; margin-bottom:1rem;">
-            Urutan program studi berdasarkan persentase peluang dari yang paling aman hingga terketat:
-        </p>
+        <div class="insight-card">
+            <strong style="color: #0F172A;">💡 Catatan Strategi:</strong><br>
+            Untuk lulus di jurusan ini, kamu harus bersaing dan menyisihkan setidaknya <b>{rasio} orang</b> per 1 kursi. 
+            {"Gunakan jurusan ini sebagai <b>Pilihan 1</b> saja dan siapkan jurusan pengaman di Pilihan 2." if peluang <= 15.0 else "Jurusan ini relatif potensial untuk dijadikan pilihan aman."}
+        </div>
         """, unsafe_allow_html=True)
+
+        # 4. Pure HTML Table (Antigagal / Clean Render)
+        st.markdown(f'<div class="table-section-title">💡 Jurusan Lain di {target["NAMA_PTN"]} (Diurutkan dari Terlonggar)</div>', unsafe_allow_html=True)
 
         alt_df = filtered_prodi_df.sort_values(by='PELUANG_PERSEN', ascending=False)
 
-        table_html = """
-        <div class="table-card">
-            <table class="clean-table">
+        table_rows_html = ""
+        for _, r in alt_df.iterrows():
+            is_selected = (r['NAMA_PRODI'] == selected_prodi)
+            row_bg = "background-color: #EFF6FF;" if is_selected else ""
+            badge_target = ' <span style="background:#2563EB; color:#FFF; font-size:0.7rem; padding:2px 6px; border-radius:4px; margin-left:4px;">INCARANMU</span>' if is_selected else ""
+            
+            table_rows_html += f"""
+            <tr style="{row_bg}">
+                <td><b>{r['KODE_PRODI']}</b></td>
+                <td><b>{r['NAMA_PRODI']}</b> {badge_target}</td>
+                <td>{r['JENJANG']}</td>
+                <td>{r['DAYA_TAMPUNG_2026']} Kursi</td>
+                <td>{r['PEMINAT_2025']:,}</td>
+                <td><strong style="color: #2563EB;">{r['PELUANG_PERSEN']}%</strong></td>
+                <td>1 : {r['RASIO_PERSAINGAN']}</td>
+            </tr>
+            """
+
+        full_table_html = f"""
+        <div class="custom-table-card">
+            <table class="data-table">
                 <thead>
                     <tr>
                         <th>Kode</th>
                         <th>Program Studi</th>
                         <th>Jenjang</th>
-                        <th>Kuota 2026</th>
-                        <th>Peminat 2025</th>
-                        <th>Peluang (%)</th>
+                        <th>Daya Tampung</th>
+                        <th>Peminat</th>
+                        <th>Peluang</th>
                         <th>Rasio</th>
                     </tr>
                 </thead>
                 <tbody>
-        """
-        for _, row in alt_df.iterrows():
-            is_selected = (row['NAMA_PRODI'] == selected_prodi)
-            bg_style = "background-color: #EFF6FF;" if is_selected else ""
-            
-            table_html += f"""
-                <tr style="{bg_style}">
-                    <td><b>{row['KODE_PRODI']}</b></td>
-                    <td>{row['NAMA_PRODI']} {'(Jurusan Pilihanmu)' if is_selected else ''}</td>
-                    <td><span style="background:#F1F5F9; padding:2px 6px; border-radius:4px; font-size:0.75rem;">{row['JENJANG']}</span></td>
-                    <td>{row['DAYA_TAMPUNG_2026']} Kursi</td>
-                    <td>{row['PEMINAT_2025']:,}</td>
-                    <td><b style="color: #2563EB;">{row['PELUANG_PERSEN']}%</b></td>
-                    <td>1 : {row['RASIO_PERSAINGAN']}</td>
-                </tr>
-            """
-        table_html += """
+                    {table_rows_html}
                 </tbody>
             </table>
         </div>
         """
-        st.markdown(table_html, unsafe_allow_html=True)
+        st.markdown(full_table_html, unsafe_allow_html=True)
