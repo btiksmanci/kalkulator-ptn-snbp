@@ -1,245 +1,122 @@
 import pandas as pd
 import streamlit as st
 
-# ==========================================
-# 1. PAGE CONFIG
-# ==========================================
+# 1. Konfigurasi Halaman Web
 st.set_page_config(
-    page_title="PTNMatch — Analisis Peluang & Rasio PTN",
+    page_title="Kalkulator Rasio Peluang PTN",
     page_icon="🎓",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# ==========================================
-# 2. CLEAN & STABLE MODERN LIGHT THEME CSS
-# ==========================================
-CLEAN_UI_CSS = """
+# 2. Custom CSS Modern & Professional UI
+st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-
-    /* BASE APP LAYOUT */
-    html, body, [data-testid="stAppViewContainer"], .main {
-        background-color: #F8FAFC !important;
-        font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
+    /* Font Global & Warna Latar */
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+    
+    html, body, [class*="css"] {
+        font-family: 'Plus Jakarta Sans', sans-serif;
     }
     
-    #MainMenu, footer, header, [data-testid="stHeader"] { 
-        display: none !important; 
-    }
-
-    .block-container {
-        padding-top: 2rem !important;
-        padding-bottom: 3rem !important;
-        max-width: 800px !important;
-    }
-
-    /* BRANDING NAVBAR */
-    .app-navbar {
-        display: flex;
-        align-items: center;
-        padding-bottom: 1rem;
-        margin-bottom: 1.5rem;
-        border-bottom: 1px solid #E2E8F0;
-    }
-    .app-brand {
-        font-size: 1.25rem;
-        font-weight: 800;
-        color: #0F172A;
-    }
-    .app-brand span { color: #2563EB; }
-
-    /* HERO SECTION */
-    .hero-container {
-        text-align: center;
+    /* Gradient Banner Header */
+    .main-header {
+        background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
+        padding: 2.5rem 2rem;
+        border-radius: 16px;
+        color: white;
         margin-bottom: 2rem;
+        box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.3);
     }
-    .hero-badge {
-        display: inline-block;
-        background: #EFF6FF;
-        color: #2563EB;
-        padding: 6px 16px;
-        border-radius: 99px;
-        font-size: 0.75rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-        border: 1px solid #DBEAFE;
-    }
-    .hero-title {
-        font-size: 2.1rem;
+    
+    .main-header h1 {
+        color: #FFFFFF !important;
         font-weight: 800;
-        color: #0F172A;
-        line-height: 1.25;
+        font-size: 2.2rem;
         margin-bottom: 0.5rem;
     }
-    .hero-subtitle {
-        font-size: 0.95rem;
-        color: #64748B;
-        max-width: 520px;
-        margin: 0 auto;
-        line-height: 1.5;
+    
+    .main-header p {
+        color: #E0E7FF !important;
+        font-size: 1.05rem;
+        margin: 0;
     }
 
-    /* STEP HEADER CARDS */
-    .step-box {
+    /* Container Card Pencarian */
+    .search-card {
         background: #FFFFFF;
+        padding: 1.5rem;
+        border-radius: 14px;
         border: 1px solid #E2E8F0;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        margin-bottom: 1.5rem;
+    }
+
+    /* Styling Metric Box (Card Stat) */
+    .stat-card {
+        background: #F8FAFC;
+        border: 1px solid #E2E8F0;
+        padding: 1.2rem;
         border-radius: 12px;
-        padding: 12px 16px;
-        margin-bottom: 8px;
-    }
-    .step-badge {
-        background: #EFF6FF;
-        color: #2563EB;
-        font-size: 0.7rem;
-        font-weight: 800;
-        padding: 2px 6px;
-        border-radius: 4px;
-        margin-right: 6px;
-    }
-    .step-title {
-        font-size: 0.85rem;
-        font-weight: 700;
-        color: #0F172A;
-    }
-    .step-sub {
-        font-size: 0.78rem;
-        color: #64748B;
-        margin-top: 2px;
-    }
-
-    /* BUTTON CUSTOMIZATION */
-    div.stButton > button {
-        background: #2563EB !important;
-        color: #FFFFFF !important;
-        font-weight: 700 !important;
-        font-size: 0.95rem !important;
-        height: 48px !important;
-        border-radius: 10px !important;
-        border: none !important;
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2) !important;
-        margin-top: 10px;
-    }
-    div.stButton > button:hover {
-        background: #1D4ED8 !important;
-    }
-
-    /* RESULT HERO CARD */
-    .result-card {
-        background: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-radius: 16px;
-        padding: 24px;
         text-align: center;
-        margin: 1.5rem 0 1rem 0;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-    .result-sub {
-        font-size: 0.78rem;
-        font-weight: 700;
+    
+    .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+        border-color: #CBD5E1;
+    }
+    
+    .stat-label {
+        font-size: 0.85rem;
+        font-weight: 600;
         color: #64748B;
         text-transform: uppercase;
         letter-spacing: 0.5px;
-    }
-    .result-val {
-        font-size: 3.5rem;
-        font-weight: 800;
-        color: #2563EB;
-        line-height: 1.1;
-        margin: 8px 0;
+        margin-bottom: 0.4rem;
     }
     
-    .badge-status {
-        display: inline-block;
-        padding: 4px 14px;
-        border-radius: 99px;
-        font-weight: 700;
-        font-size: 0.8rem;
-    }
-    .status-ketat { background: #FEF2F2; color: #EF4444; border: 1px solid #FCA5A5; }
-    .status-sedang { background: #FFFBEB; color: #D97706; border: 1px solid #FCD34D; }
-    .status-longgar { background: #F0FDF4; color: #16A34A; border: 1px solid #86EFAC; }
-
-    /* METRIC CARDS */
-    .metric-card {
-        background: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-radius: 12px;
-        padding: 14px;
-        text-align: center;
-    }
-    .metric-head {
-        font-size: 0.7rem;
-        font-weight: 700;
-        color: #64748B;
-    }
-    .metric-body {
-        font-size: 1.3rem;
+    .stat-value {
+        font-size: 1.8rem;
         font-weight: 800;
         color: #0F172A;
-        margin-top: 2px;
     }
 
-    /* INSIGHT BOX */
-    .insight-box {
-        background: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-radius: 12px;
-        padding: 16px;
-        margin: 1rem 0;
-        font-size: 0.88rem;
-        color: #475569;
-        line-height: 1.5;
+    /* Styling Custom Button */
+    div.stButton > button {
+        background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
+        color: white !important;
+        font-weight: 700 !important;
+        font-size: 1.05rem !important;
+        padding: 0.75rem 1.5rem !important;
+        border-radius: 10px !important;
+        border: none !important;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3) !important;
+        transition: all 0.2s ease !important;
     }
-
-    /* CUSTOM STABLE HTML TABLE */
-    .custom-table-container {
-        background: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-radius: 12px;
-        overflow-x: auto;
-        margin-top: 10px;
+    
+    div.stButton > button:hover {
+        background: linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%) !important;
+        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4) !important;
+        transform: translateY(-1px);
     }
-    table.custom-table {
-        width: 100%;
-        border-collapse: collapse;
+    
+    /* Badges Detail Jurusan */
+    .badge-info {
+        display: inline-block;
+        background: #EFF6FF;
+        color: #1D4ED8;
+        padding: 0.35rem 0.8rem;
+        border-radius: 20px;
         font-size: 0.85rem;
-        text-align: left;
-    }
-    table.custom-table th {
-        background-color: #F8FAFC;
-        color: #475569;
-        font-weight: 700;
-        padding: 12px 14px;
-        border-bottom: 1px solid #E2E8F0;
-    }
-    table.custom-table td {
-        padding: 12px 14px;
-        border-bottom: 1px solid #F1F5F9;
-        color: #0F172A;
-    }
-    table.custom-table tr:last-child td {
-        border-bottom: none;
-    }
-    table.custom-table tr:hover {
-        background-color: #F8FAFC;
-    }
-
-    .disclaimer {
-        text-align: center;
-        font-size: 0.78rem;
-        color: #94A3B8;
-        margin-top: 2rem;
-        padding-top: 1rem;
-        border-top: 1px solid #E2E8F0;
+        font-weight: 600;
+        margin-right: 0.5rem;
     }
 </style>
-"""
-st.markdown(CLEAN_UI_CSS, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
-# ==========================================
-# 3. LOAD DATA
-# ==========================================
+# 3. Load Data dari CSV
 @st.cache_data
 def load_data():
     df = pd.read_csv('MASTER_all_prodi.csv', sep=';', on_bad_lines='skip')
@@ -258,35 +135,25 @@ def load_data():
 
 df = load_data()
 
-# ==========================================
-# 4. HEADER & HERO
-# ==========================================
+# 4. Banner Header Utama
 st.markdown("""
-<div class="app-navbar">
-    <div class="app-brand">🎓 PTN<span>Match</span></div>
-</div>
-<div class="hero-container">
-    <div class="hero-badge">✨ SNBP 2026 • DATA RESMI TERKINI</div>
-    <h1 class="hero-title">Seberapa kompetitif jurusan impianmu?</h1>
-    <p class="hero-subtitle">Cek peluang kelulusan dan rasio persaingan PTN secara presisi berdasarkan analisis data resmi.</p>
+<div class="main-header">
+    <h1>🎓 Analisis Peluang & Rasio PTN</h1>
+    <p>Portal kalkulasi keketatan persaingan jurusan berdasarkan data resmi Daya Tampung & Peminat.</p>
 </div>
 """, unsafe_allow_html=True)
 
-# ==========================================
-# 5. INPUT FORM
-# ==========================================
-col_s1, col_s2 = st.columns(2, gap="small")
+# 5. Form Pencarian Clean Card
+col_search1, col_search2 = st.columns(2)
 
-with col_s1:
-    st.markdown("""
-    <div class="step-box">
-        <span class="step-badge">STEP 01</span>
-        <span class="step-title">UNIVERSITAS</span>
-        <div class="step-sub">Mau kuliah di mana?</div>
-    </div>
-    """, unsafe_allow_html=True)
+with col_search1:
     list_ptn = sorted(df['NAMA_PTN'].unique())
-    selected_ptn = st.selectbox("Pilih PTN", list_ptn, index=None, placeholder="🔍 Cari universitas...", label_visibility="collapsed")
+    selected_ptn = st.selectbox(
+        "🏫 Pilih Universitas / PTN Target", 
+        list_ptn, 
+        index=None, 
+        placeholder="Cari atau pilih PTN..."
+    )
 
 if selected_ptn:
     filtered_prodi_df = df[df['NAMA_PTN'] == selected_ptn]
@@ -295,31 +162,23 @@ else:
     filtered_prodi_df = pd.DataFrame()
     list_prodi = []
 
-with col_s2:
-    st.markdown("""
-    <div class="step-box">
-        <span class="step-badge">STEP 02</span>
-        <span class="step-title">PROGRAM STUDI</span>
-        <div class="step-sub">Jurusan yang kamu incar?</div>
-    </div>
-    """, unsafe_allow_html=True)
+with col_search2:
     selected_prodi = st.selectbox(
-        "Pilih Prodi", 
+        "📚 Pilih Program Studi", 
         list_prodi, 
         index=None, 
-        placeholder="🔍 Cari prodi..." if selected_ptn else "Pilih PTN dahulu",
-        disabled=(not selected_ptn),
-        label_visibility="collapsed"
+        placeholder="Cari atau pilih Jurusan...",
+        disabled=(not selected_ptn)
     )
 
-btn_hitung = st.button("Analisis Peluang →", use_container_width=True)
+st.write("")
+btn_hitung = st.button("📊 Analisis Peluang Kelulusan", use_container_width=True)
+st.write("")
 
-# ==========================================
-# 6. HASIL ANALISIS
-# ==========================================
+# 6. Logika Menampilkan Hasil
 if btn_hitung:
     if not selected_ptn or not selected_prodi:
-        st.warning("⚠️ Silakan pilih Universitas dan Program Studi terlebih dahulu.")
+        st.warning("⚠️ **Mohon lengkapi pilihan**: Pilih Universitas dan Program Studi terlebih dahulu.")
     else:
         target = filtered_prodi_df[filtered_prodi_df['NAMA_PRODI'] == selected_prodi].iloc[0]
 
@@ -328,104 +187,93 @@ if btn_hitung:
         peluang = target['PELUANG_PERSEN']
         rasio = target['RASIO_PERSAINGAN']
 
-        if peluang < 5.0:
-            status_class = "status-ketat"
-            status_label = "🔴 SANGAT KETAT"
-        elif peluang <= 15.0:
-            status_class = "status-ketat"
-            status_label = "🟠 KETAT"
-        elif peluang <= 30.0:
-            status_class = "status-sedang"
-            status_label = "🟡 SEDANG"
-        else:
-            status_class = "status-longgar"
-            status_label = "🟢 PELUANG BESAR"
-
+        # Header Hasil & Metadata
+        st.markdown(f"## 📌 {target['NAMA_PRODI']} ({target['JENJANG']})")
         st.markdown(f"""
-        <div class="result-card">
-            <div class="result-sub">{target['NAMA_PTN']} — {target['NAMA_PRODI']}</div>
-            <div class="result-val">{peluang}%</div>
-            <div class="badge-status {status_class}">{status_label}</div>
-            <p style="color:#64748B; font-size:0.85rem; margin-top:10px; margin-bottom:0;">
-                <b>{kuota}</b> kuota diperebutkan oleh <b>{peminat:,}</b> peminat
-            </p>
+        <div style="margin-bottom: 1.5rem;">
+            <span class="badge-info">🏛️ {target['NAMA_PTN']}</span>
+            <span class="badge-info">🔑 Kode: {target['KODE_PRODI']}</span>
+            <span class="badge-info">🎨 Portofolio: {target['JENIS_PORTOFOLIO']}</span>
         </div>
         """, unsafe_allow_html=True)
 
-        mc1, mc2, mc3 = st.columns(3, gap="small")
-        with mc1:
-            st.markdown(f"""
-            <div class="metric-card">
-                <div class="metric-head">🪑 KUOTA 2026</div>
-                <div class="metric-body">{kuota}</div>
-            </div>
-            """, unsafe_allow_html=True)
-        with mc2:
-            st.markdown(f"""
-            <div class="metric-card">
-                <div class="metric-head">👥 PEMINAT 2025</div>
-                <div class="metric-body">{peminat:,}</div>
-            </div>
-            """, unsafe_allow_html=True)
-        with mc3:
-            st.markdown(f"""
-            <div class="metric-card">
-                <div class="metric-head">🔥 RASIO</div>
-                <div class="metric-body">1 : {rasio}</div>
-            </div>
-            """, unsafe_allow_html=True)
-
-        st.markdown(f"""
-        <div class="insight-box">
-            <b style="color:#0F172A;">💡 Analisis Peluang:</b><br>
-            Rasio persaingan prodi ini adalah <b>1 : {rasio}</b> (Setiap 1 kursi diperebutkan oleh {rasio} pendaftar). 
-            Pertimbangkan prodi alternatif dengan rasio lebih longgar di bawah ini sebagai opsi aman.
-        </div>
-        """, unsafe_allow_html=True)
-
-        st.markdown("""<h4 style="font-size:0.95rem; font-weight:700; color:#0F172A; margin-top:1.5rem;">Opsi Prodi Lain di PTN Ini</h4>""", unsafe_allow_html=True)
-
-        # TABEL NATIVE HTML UNTUK TAMPILAN 100% STABIL & BEBAS DARK-MODE BUG
-        alt_df = filtered_prodi_df.sort_values(by='PELUANG_PERSEN', ascending=False)
+        # Dashboard Metric Cards (4 Kolom Rapi & Responsif)
+        m1, m2, m3, m4 = st.columns(4)
         
-        table_html = """
-        <div class="custom-table-container">
-            <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th>Kode</th>
-                        <th>Program Studi</th>
-                        <th>Jenjang</th>
-                        <th>Kuota 2026</th>
-                        <th>Peminat 2025</th>
-                        <th>Peluang (%)</th>
-                        <th>Rasio</th>
-                    </tr>
-                </thead>
-                <tbody>
-        """
-        for _, row in alt_df.iterrows():
-            table_html += f"""
-                <tr>
-                    <td><b>{row['KODE_PRODI']}</b></td>
-                    <td>{row['NAMA_PRODI']}</td>
-                    <td>{row['JENJANG']}</td>
-                    <td>{row['DAYA_TAMPUNG_2026']} Kursi</td>
-                    <td>{row['PEMINAT_2025']:,}</td>
-                    <td><b>{row['PELUANG_PERSEN']}%</b></td>
-                    <td>1 : {row['RASIO_PERSAINGAN']}</td>
-                </tr>
-            """
-        table_html += """
-                </tbody>
-            </table>
-        </div>
-        """
-        st.markdown(table_html, unsafe_allow_html=True)
+        with m1:
+            st.markdown(f"""
+            <div class="stat-card">
+                <div class="stat-label">📦 Daya Tampung</div>
+                <div class="stat-value">{kuota} <span style="font-size: 1rem; color: #64748B;">Kursi</span></div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        with m2:
+            st.markdown(f"""
+            <div class="stat-card">
+                <div class="stat-label">👥 Peminat Lalu</div>
+                <div class="stat-value">{peminat:,} <span style="font-size: 1rem; color: #64748B;">Siswa</span></div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        with m3:
+            st.markdown(f"""
+            <div class="stat-card">
+                <div class="stat-label">📊 Peluang Lulus</div>
+                <div class="stat-value" style="color: #2563EB;">{peluang}%</div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        with m4:
+            st.markdown(f"""
+            <div class="stat-card">
+                <div class="stat-label">⚖️ Rasio Persaingan</div>
+                <div class="stat-value" style="color: #D97706;">1 : {rasio}</div>
+            </div>
+            """, unsafe_allow_html=True)
 
-# FOOTER
-st.markdown("""
-<div class="disclaimer">
-    ⚠️ Data berdasarkan simulasi estimasi resmi. Hasil ini bukan jaminan kelulusan mutlak.
-</div>
-""", unsafe_allow_html=True)
+        st.write("")
+        st.write("")
+
+        # Banner Rekomendasi & Tingkat Kesulitan
+        if peminat == 0:
+            st.info("ℹ️ **Jurusan Baru / Belum Ada Data Peminat**: Peluang relatif aman karena belum ada kompetisi tercatat.")
+        elif peluang < 5.0:
+            st.error(f"### 🔴 Kategori Persaingan: SANGAT KETAT (Super Favorit)\n"
+                     f"Hanya **{peluang}%** dari total pendaftar yang diterima (Kamu harus menyisihkan **{rasio} orang** per kursi). "
+                     f"Direkomendasikan sebagai **Pilihan 1** dengan strategi nilai yang sangat tinggi.")
+        elif peluang <= 15.0:
+            st.warning(f"### 🟠 Kategori Persaingan: KETAT / TINGGI\n"
+                       f"Peluang diterima **{peluang}%** (Kamu harus menyisihkan sekitar **{rasio} orang** per kursi). "
+                       f"Merupakan jurusan favorit yang butuh persiapan matang.")
+        elif peluang <= 30.0:
+            st.info(f"### 🟡 Kategori Persaingan: SEDANG / MODERAT\n"
+                    f"Peluang diterima **{peluang}%** (Rasio persaingan **1 : {rasio}** orang). "
+                    f"Sangat ideal dijadikan **Pilihan 1** atau **Pilihan 2** yang aman.")
+        else:
+            st.success(f"### 🟢 Kategori Persaingan: PELUANG BESAR\n"
+                       f"Peluang kelulusan tergolong tinggi sebesar **{peluang}%** (Persaingan **1 : {rasio}** orang). "
+                       f"Sangat direkomendasikan untuk pengaman di **Pilihan 2**.")
+
+        st.divider()
+
+        # Tabel Perbandingan Jurusan di PTN Sama
+        st.subheader(f"💡 Perbandingan Jurusan Lain di {selected_ptn}")
+        st.caption("Daftar urutan jurusan dari yang paling tinggi persentase kelulusannya hingga yang paling ketat.")
+
+        alt_df = filtered_prodi_df.sort_values(by='PELUANG_PERSEN', ascending=False)
+
+        st.dataframe(
+            alt_df[['KODE_PRODI', 'NAMA_PRODI', 'JENJANG', 'DAYA_TAMPUNG_2026', 'PEMINAT_2025', 'PELUANG_PERSEN', 'RASIO_PERSAINGAN']],
+            use_container_width=True,
+            hide_index=True,
+            column_config={
+                "KODE_PRODI": "Kode",
+                "NAMA_PRODI": "Program Studi",
+                "JENJANG": "Jenjang",
+                "DAYA_TAMPUNG_2026": st.column_config.NumberColumn("Kuota 2026", format="%d Kursi"),
+                "PEMINAT_2025": st.column_config.NumberColumn("Peminat 2025", format="%d Pendaftar"),
+                "PELUANG_PERSEN": st.column_config.NumberColumn("Peluang (%)", format="%.2f%%"),
+                "RASIO_PERSAINGAN": st.column_config.NumberColumn("Rasio (1 : N)", format="1 : %d")
+            }
+        )
