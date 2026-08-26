@@ -9,20 +9,32 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 2. Custom CSS Modern & Professional UI
+# 2. Custom CSS Modern & Professional UI (Fixed Dark/Light Mode Conflicts)
 st.markdown("""
 <style>
-    /* Font Global & Warna Latar */
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
     
-    html, body, [class*="css"] {
-        font-family: 'Plus Jakarta Sans', sans-serif;
+    /* Force Light Theme Base Container */
+    html, body, [data-testid="stAppViewContainer"], .main {
+        background-color: #F8FAFC !important;
+        font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
+        color: #0F172A !important;
+    }
+
+    #MainMenu, footer, header, [data-testid="stHeader"] { 
+        display: none !important; 
+    }
+
+    .block-container {
+        padding-top: 2rem !important;
+        padding-bottom: 3rem !important;
+        max-width: 1000px !important;
     }
     
     /* Gradient Banner Header */
     .main-header {
         background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
-        padding: 2.5rem 2rem;
+        padding: 2.2rem 2rem;
         border-radius: 16px;
         color: white;
         margin-bottom: 2rem;
@@ -32,45 +44,36 @@ st.markdown("""
     .main-header h1 {
         color: #FFFFFF !important;
         font-weight: 800;
-        font-size: 2.2rem;
-        margin-bottom: 0.5rem;
+        font-size: 2rem;
+        margin-bottom: 0.4rem;
     }
     
     .main-header p {
         color: #E0E7FF !important;
-        font-size: 1.05rem;
+        font-size: 1rem;
         margin: 0;
-    }
-
-    /* Container Card Pencarian */
-    .search-card {
-        background: #FFFFFF;
-        padding: 1.5rem;
-        border-radius: 14px;
-        border: 1px solid #E2E8F0;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        margin-bottom: 1.5rem;
     }
 
     /* Styling Metric Box (Card Stat) */
     .stat-card {
-        background: #F8FAFC;
+        background: #FFFFFF;
         border: 1px solid #E2E8F0;
         padding: 1.2rem;
         border-radius: 12px;
         text-align: center;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     
     .stat-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
         border-color: #CBD5E1;
     }
     
     .stat-label {
-        font-size: 0.85rem;
-        font-weight: 600;
+        font-size: 0.8rem;
+        font-weight: 700;
         color: #64748B;
         text-transform: uppercase;
         letter-spacing: 0.5px;
@@ -78,7 +81,7 @@ st.markdown("""
     }
     
     .stat-value {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
         font-weight: 800;
         color: #0F172A;
     }
@@ -88,7 +91,7 @@ st.markdown("""
         background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
         color: white !important;
         font-weight: 700 !important;
-        font-size: 1.05rem !important;
+        font-size: 1rem !important;
         padding: 0.75rem 1.5rem !important;
         border-radius: 10px !important;
         border: none !important;
@@ -112,6 +115,42 @@ st.markdown("""
         font-size: 0.85rem;
         font-weight: 600;
         margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+        border: 1px solid #DBEAFE;
+    }
+
+    /* TABEL HTML STABIL (PENGGANTI ST.DATAFRAME YANG BLANK) */
+    .custom-table-container {
+        background: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        border-radius: 12px;
+        overflow-x: auto;
+        margin-top: 1rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+    table.custom-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.88rem;
+        text-align: left;
+    }
+    table.custom-table th {
+        background-color: #F8FAFC;
+        color: #475569;
+        font-weight: 700;
+        padding: 12px 16px;
+        border-bottom: 1px solid #E2E8F0;
+    }
+    table.custom-table td {
+        padding: 12px 16px;
+        border-bottom: 1px solid #F1F5F9;
+        color: #0F172A;
+    }
+    table.custom-table tr:last-child td {
+        border-bottom: none;
+    }
+    table.custom-table tr:hover {
+        background-color: #F8FAFC;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -204,7 +243,7 @@ if btn_hitung:
             st.markdown(f"""
             <div class="stat-card">
                 <div class="stat-label">📦 Daya Tampung</div>
-                <div class="stat-value">{kuota} <span style="font-size: 1rem; color: #64748B;">Kursi</span></div>
+                <div class="stat-value">{kuota} <span style="font-size: 0.9rem; color: #64748B;">Kursi</span></div>
             </div>
             """, unsafe_allow_html=True)
             
@@ -212,7 +251,7 @@ if btn_hitung:
             st.markdown(f"""
             <div class="stat-card">
                 <div class="stat-label">👥 Peminat Lalu</div>
-                <div class="stat-value">{peminat:,} <span style="font-size: 1rem; color: #64748B;">Siswa</span></div>
+                <div class="stat-value">{peminat:,} <span style="font-size: 0.9rem; color: #64748B;">Siswa</span></div>
             </div>
             """, unsafe_allow_html=True)
             
@@ -257,23 +296,43 @@ if btn_hitung:
 
         st.divider()
 
-        # Tabel Perbandingan Jurusan di PTN Sama
+        # Tabel Perbandingan Jurusan di PTN Sama (Menggunakan HTML Table yang Stabil)
         st.subheader(f"💡 Perbandingan Jurusan Lain di {selected_ptn}")
         st.caption("Daftar urutan jurusan dari yang paling tinggi persentase kelulusannya hingga yang paling ketat.")
 
         alt_df = filtered_prodi_df.sort_values(by='PELUANG_PERSEN', ascending=False)
 
-        st.dataframe(
-            alt_df[['KODE_PRODI', 'NAMA_PRODI', 'JENJANG', 'DAYA_TAMPUNG_2026', 'PEMINAT_2025', 'PELUANG_PERSEN', 'RASIO_PERSAINGAN']],
-            use_container_width=True,
-            hide_index=True,
-            column_config={
-                "KODE_PRODI": "Kode",
-                "NAMA_PRODI": "Program Studi",
-                "JENJANG": "Jenjang",
-                "DAYA_TAMPUNG_2026": st.column_config.NumberColumn("Kuota 2026", format="%d Kursi"),
-                "PEMINAT_2025": st.column_config.NumberColumn("Peminat 2025", format="%d Pendaftar"),
-                "PELUANG_PERSEN": st.column_config.NumberColumn("Peluang (%)", format="%.2f%%"),
-                "RASIO_PERSAINGAN": st.column_config.NumberColumn("Rasio (1 : N)", format="1 : %d")
-            }
-        )
+        table_html = """
+        <div class="custom-table-container">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Kode</th>
+                        <th>Program Studi</th>
+                        <th>Jenjang</th>
+                        <th>Kuota 2026</th>
+                        <th>Peminat 2025</th>
+                        <th>Peluang (%)</th>
+                        <th>Rasio</th>
+                    </tr>
+                </thead>
+                <tbody>
+        """
+        for _, row in alt_df.iterrows():
+            table_html += f"""
+                <tr>
+                    <td><b>{row['KODE_PRODI']}</b></td>
+                    <td>{row['NAMA_PRODI']}</td>
+                    <td>{row['JENJANG']}</td>
+                    <td>{row['DAYA_TAMPUNG_2026']} Kursi</td>
+                    <td>{row['PEMINAT_2025']:,} Pendaftar</td>
+                    <td><span style="color: #2563EB; font-weight: 700;">{row['PELUANG_PERSEN']}%</span></td>
+                    <td>1 : {row['RASIO_PERSAINGAN']}</td>
+                </tr>
+            """
+        table_html += """
+                </tbody>
+            </table>
+        </div>
+        """
+        st.markdown(table_html, unsafe_allow_html=True)
