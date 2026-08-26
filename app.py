@@ -12,13 +12,13 @@ st.set_page_config(
 )
 
 # ==========================================
-# 2. STRICT FORCE LIGHT THEME CSS
+# 2. STRICT OVERRIDE FOR SELECTBOX & DATAFRAME
 # ==========================================
-FORCE_LIGHT_CSS = """
+STRICT_LIGHT_CSS = """
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-    /* PAKSA OVERRIDE CORE STREAMLIT CONTAINER */
+    /* OVERRIDE GLOBAL CONTAINER */
     html, body, [data-testid="stApp"], [data-testid="stAppViewContainer"], .main, .stApp {
         background-color: #F8FAFC !important;
         color: #0F172A !important;
@@ -125,23 +125,27 @@ FORCE_LIGHT_CSS = """
         margin-bottom: 0.8rem;
     }
 
-    /* CUSTOM STREAMLIT SELECTBOX - PAKSA TERANG */
+    /* FIX TOTAL DARI DROPDOWN / SELECTBOX */
+    div[data-baseweb="select"] {
+        background-color: #F1F5F9 !important;
+        border-radius: 10px !important;
+    }
     div[data-baseweb="select"] > div {
         background-color: #F1F5F9 !important;
         border: 1px solid #CBD5E1 !important;
         border-radius: 10px !important;
-        min-height: 44px !important;
-    }
-    div[data-baseweb="select"] * {
         color: #0F172A !important;
+    }
+    div[data-baseweb="select"] [data-testid="stMarkdownContainer"] p,
+    div[data-baseweb="select"] span,
+    div[data-baseweb="select"] input {
+        color: #0F172A !important;
+    }
+    div[data-baseweb="select"] svg {
         fill: #0F172A !important;
     }
-    div[data-baseweb="select"]:hover > div {
-        border-color: #2563EB !important;
-        background-color: #FFFFFF !important;
-    }
 
-    /* BUTTON ACTION */
+    /* FIX BUTTON ACTION */
     div.stButton > button {
         background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
         color: #FFFFFF !important;
@@ -216,7 +220,7 @@ FORCE_LIGHT_CSS = """
         margin-top: 2px;
     }
 
-    /* INSIGHT */
+    /* INSIGHT CARD */
     .insight-card {
         background: #FFFFFF !important;
         border: 1px solid #E2E8F0 !important;
@@ -226,11 +230,18 @@ FORCE_LIGHT_CSS = """
         box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03);
     }
 
-    /* DATAFRAME OVERRIDE LIGHT */
+    /* PAKSA ST.DATAFRAME JADI TERANG TOTAL */
     div[data-testid="stDataFrame"] {
         background-color: #FFFFFF !important;
         border: 1px solid #E2E8F0 !important;
         border-radius: 12px !important;
+    }
+    div[data-testid="stDataFrame"] iframe {
+        color-scheme: light !important;
+    }
+    div[data-testid="stDataFrame"] * {
+        background-color: #FFFFFF !important;
+        color: #0F172A !important;
     }
 
     /* FOOTER */
@@ -252,7 +263,7 @@ FORCE_LIGHT_CSS = """
     }
 </style>
 """
-st.markdown(FORCE_LIGHT_CSS, unsafe_allow_html=True)
+st.markdown(STRICT_LIGHT_CSS, unsafe_allow_html=True)
 
 # ==========================================
 # 3. BACKEND DATA LOGIC
