@@ -11,224 +11,238 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
+# State untuk Simpan Tema (Default: Light)
+if "theme" not in st.session_state:
+    st.session_state.theme = "☀️ Terang"
+
 # ==========================================
-# 2. DESIGN SYSTEM & MODERN CSS
+# 2. THEME CONFIG & DYNAMIC CSS
 # ==========================================
-CUSTOM_CSS = """
+is_dark = st.session_state.theme == "🌙 Gelap"
+
+# Variables berdasarkan Tema
+bg_body = "#0F172A" if is_dark else "#F8FAFC"
+bg_card = "#1E293B" if is_dark else "#FFFFFF"
+bg_input = "#334155" if is_dark else "#F1F5F9"
+text_main = "#F8FAFC" if is_dark else "#0F172A"
+text_sub = "#94A3B8" if is_dark else "#64748B"
+border_color = "#334155" if is_dark else "#E2E8F0"
+navbar_border = "#1E293B" if is_dark else "#E2E8F0"
+
+CUSTOM_CSS = f"""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
     
-    html, body, [class*="css"] {
+    html, body, [class*="css"] {{
         font-family: 'Plus Jakarta Sans', sans-serif !important;
-        background-color: #F8FAFC !important;
-        color: #0F172A;
-    }
+        background-color: {bg_body} !important;
+        color: {text_main} !important;
+    }}
     
-    #MainMenu, footer, header {visibility: hidden; height: 0;}
-    .block-container {
-        padding-top: 1.5rem !important;
+    #MainMenu, footer, header {{visibility: hidden; height: 0;}}
+    .block-container {{
+        padding-top: 1rem !important;
         padding-bottom: 3rem !important;
-        max-width: 900px !important;
-    }
+        max-width: 880px !important;
+    }}
 
     /* Custom Navbar */
-    .app-navbar {
+    .app-navbar {{
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 0.8rem 0;
         margin-bottom: 2rem;
-        border-bottom: 1px solid #E2E8F0;
-    }
-    .app-brand {
+        border-bottom: 1px solid {navbar_border};
+    }}
+    .app-brand {{
         font-size: 1.35rem;
         font-weight: 800;
-        color: #0F172A;
+        color: {text_main};
         letter-spacing: -0.5px;
         display: flex;
         align-items: center;
         gap: 8px;
-    }
-    .app-brand span {
-        color: #2563EB;
-    }
-    .app-nav-links {
-        display: flex;
-        gap: 20px;
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: #64748B;
-    }
+    }}
+    .app-brand span {{ color: #2563EB; }}
 
     /* Hero Center Aligned */
-    .hero-container {
+    .hero-container {{
         text-align: center;
-        margin-bottom: 2.5rem;
-    }
-    .hero-badge {
+        margin-bottom: 2.2rem;
+    }}
+    .hero-badge {{
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: #EFF6FF;
-        border: 1px solid #DBEAFE;
-        color: #2563EB;
+        background: {'#1E293B' if is_dark else '#EFF6FF'};
+        border: 1px solid {'#334155' if is_dark else '#DBEAFE'};
+        color: #3B82F6;
         padding: 6px 16px;
         border-radius: 99px;
         font-size: 0.8rem;
         font-weight: 700;
         margin-bottom: 1rem;
         letter-spacing: 0.5px;
-    }
-    .hero-title {
-        font-size: 2.3rem;
+    }}
+    .hero-title {{
+        font-size: 2.2rem;
         font-weight: 800;
         line-height: 1.25;
-        color: #0F172A;
+        color: {text_main};
         letter-spacing: -0.8px;
         margin-bottom: 0.8rem;
-    }
-    .hero-subtitle {
-        font-size: 1rem;
-        color: #64748B;
+    }}
+    .hero-subtitle {{
+        font-size: 0.98rem;
+        color: {text_sub};
         line-height: 1.6;
-        max-width: 600px;
+        max-width: 620px;
         margin: 0 auto;
-    }
+    }}
 
-    /* Step Card Container */
-    .step-card {
-        background: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-radius: 20px;
-        padding: 20px 24px;
-        box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.03);
-        height: 100%;
-    }
-    .step-header {
+    /* Card Wrapper Presisi */
+    .custom-step-box {{
+        background: {bg_card};
+        border: 1px solid {border_color};
+        border-radius: 18px;
+        padding: 20px;
+        box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+        margin-bottom: 10px;
+    }}
+    .step-header {{
         display: flex;
         align-items: center;
         gap: 10px;
-        margin-bottom: 0.4rem;
-    }
-    .step-num {
-        background: #EFF6FF;
-        color: #2563EB;
+        margin-bottom: 0.3rem;
+    }}
+    .step-num {{
+        background: {'#334155' if is_dark else '#EFF6FF'};
+        color: #3B82F6;
         font-size: 0.75rem;
         font-weight: 800;
         padding: 3px 8px;
         border-radius: 6px;
-    }
-    .step-title {
-        font-size: 1rem;
+    }}
+    .step-title {{
+        font-size: 0.95rem;
         font-weight: 700;
-        color: #0F172A;
-    }
-    .step-desc {
+        color: {text_main};
+    }}
+    .step-desc {{
         font-size: 0.85rem;
-        color: #64748B;
-        margin-bottom: 1rem;
-    }
+        color: {text_sub};
+        margin-bottom: 0.8rem;
+    }}
+
+    /* Penyesuaian Presisi Selectbox Streamlit */
+    div[data-baseweb="select"] > div {{
+        background-color: {bg_input} !important;
+        border: 1.5px solid {border_color} !important;
+        border-radius: 12px !important;
+        color: {text_main} !important;
+        transition: all 0.2s ease-in-out !important;
+    }}
+    div[data-baseweb="select"] * {{
+        color: {text_main} !important;
+    }}
+    div[data-baseweb="select"]:hover > div {{
+        border-color: #3B82F6 !important;
+    }}
 
     /* Button Styling */
-    div.stButton > button {
+    div.stButton > button {{
         background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
         color: white !important;
         font-weight: 700 !important;
         font-size: 1.05rem !important;
-        height: 54px !important;
+        height: 52px !important;
         border-radius: 14px !important;
         border: none !important;
-        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25) !important;
+        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3) !important;
         transition: all 0.2s ease !important;
-    }
-    div.stButton > button:hover {
+        margin-top: 10px;
+    }}
+    div.stButton > button:hover {{
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35) !important;
-    }
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4) !important;
+    }}
 
-    /* Primary Result Hero Card */
-    .result-hero {
-        background: #FFFFFF;
-        border: 1px solid #E2E8F0;
+    /* Primary Result Card */
+    .result-hero {{
+        background: {bg_card};
+        border: 1px solid {border_color};
         border-radius: 24px;
-        padding: 32px 24px;
+        padding: 30px 24px;
         text-align: center;
-        box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.05);
         margin-bottom: 1.5rem;
-    }
-    .result-hero-label {
+    }}
+    .result-hero-label {{
         font-size: 0.85rem;
         font-weight: 700;
-        color: #64748B;
+        color: {text_sub};
         text-transform: uppercase;
         letter-spacing: 1px;
-    }
-    .result-hero-value {
-        font-size: 4rem;
+    }}
+    .result-hero-value {{
+        font-size: 3.8rem;
         font-weight: 800;
-        color: #2563EB;
+        color: #3B82F6;
         letter-spacing: -2px;
         line-height: 1.1;
         margin: 10px 0;
-    }
-    .badge-status {
+    }}
+    .badge-status {{
         display: inline-block;
         padding: 6px 18px;
         border-radius: 99px;
         font-weight: 700;
         font-size: 0.9rem;
-    }
-    .status-ketat { background: #FEF2F2; color: #EF4444; border: 1px solid #FCA5A5; }
-    .status-sedang { background: #FFFBEB; color: #F59E0B; border: 1px solid #FCD34D; }
-    .status-longgar { background: #F0FDF4; color: #16A34A; border: 1px solid #86EFAC; }
+    }}
+    .status-ketat {{ background: {'#451A1A' if is_dark else '#FEF2F2'}; color: #EF4444; border: 1px solid #FCA5A5; }}
+    .status-sedang {{ background: {'#45321A' if is_dark else '#FFFBEB'}; color: #F59E0B; border: 1px solid #FCD34D; }}
+    .status-longgar {{ background: {'#1A4526' if is_dark else '#F0FDF4'}; color: #16A34A; border: 1px solid #86EFAC; }}
 
     /* Metric Cards Grid */
-    .metric-card {
-        background: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-radius: 18px;
-        padding: 18px;
-        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.02);
+    .metric-card {{
+        background: {bg_card};
+        border: 1px solid {border_color};
+        border-radius: 16px;
+        padding: 16px;
         height: 100%;
-    }
-    .metric-title {
-        font-size: 0.78rem;
+    }}
+    .metric-title {{
+        font-size: 0.75rem;
         font-weight: 700;
-        color: #64748B;
+        color: {text_sub};
         text-transform: uppercase;
         letter-spacing: 0.5px;
-    }
-    .metric-val {
-        font-size: 1.5rem;
+    }}
+    .metric-val {{
+        font-size: 1.4rem;
         font-weight: 800;
-        color: #0F172A;
+        color: {text_main};
         margin-top: 4px;
-    }
+    }}
 
     /* Insight Card */
-    .insight-card {
-        background: #F8FAFC;
-        border: 1px solid #E2E8F0;
+    .insight-card {{
+        background: {bg_card};
+        border: 1px solid {border_color};
         border-radius: 18px;
-        padding: 24px;
+        padding: 22px;
         margin-bottom: 2rem;
-    }
+    }}
     
     /* Footer Disclaimer */
-    .disclaimer-box {
+    .disclaimer-box {{
         font-size: 0.82rem;
-        color: #94A3B8;
+        color: {text_sub};
         text-align: center;
         margin-top: 3rem;
         padding-top: 1.5rem;
-        border-top: 1px solid #E2E8F0;
-    }
-
-    @media (max-width: 768px) {
-        .hero-title { font-size: 1.75rem; }
-        .result-hero-value { font-size: 3rem; }
-        .app-nav-links { display: none; }
-    }
+        border-top: 1px solid {border_color};
+    }}
 </style>
 """
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
@@ -254,16 +268,25 @@ def load_data():
 
 df = load_data()
 
-# Navbar
-st.markdown("""
-<div class="app-navbar">
+# ==========================================
+# 4. NAVBAR & TOGGLE THEME
+# ==========================================
+col_nav1, col_nav2 = st.columns([3, 1], vertical_alignment="center")
+with col_nav1:
+    st.markdown("""
     <div class="app-brand">🎓 PTN<span>Match</span></div>
-    <div class="app-nav-links">
-        <span>Panduan</span>
-        <span>Tentang Data</span>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
+
+with col_nav2:
+    selected_theme = st.segmented_control(
+        "Tema",
+        ["☀️ Terang", "🌙 Gelap"],
+        default=st.session_state.theme,
+        label_visibility="collapsed"
+    )
+    if selected_theme and selected_theme != st.session_state.theme:
+        st.session_state.theme = selected_theme
+        st.rerun()
 
 # Hero Section Centered
 st.markdown("""
@@ -275,19 +298,21 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Progress Indicator
-st.markdown("""
-<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 1rem;">
-    <span style="font-weight:700; font-size:1rem;">Langkah Analisis</span>
-    <span style="font-size:0.85rem; font-weight:700; color:#2563EB;">01 PTN ➔ 02 PRODI ➔ 03 HASIL</span>
+st.markdown(f"""
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.8rem;">
+    <span style="font-weight:700; font-size:0.95rem; color:{text_main};">Langkah Analisis</span>
+    <span style="font-size:0.85rem; font-weight:700; color:#3B82F6;">01 PTN ➔ 02 PRODI ➔ 03 HASIL</span>
 </div>
 """, unsafe_allow_html=True)
 
-# Input Step Cards
+# ==========================================
+# 5. INPUT STEP CARDS (PRESISI & MULTI-THEME)
+# ==========================================
 col_s1, col_s2 = st.columns(2, gap="medium")
 
 with col_s1:
     st.markdown("""
-    <div class="step-card">
+    <div class="custom-step-box">
         <div class="step-header">
             <span class="step-num">STEP 01</span>
             <span class="step-title">UNIVERSITAS</span>
@@ -314,7 +339,7 @@ else:
 
 with col_s2:
     st.markdown("""
-    <div class="step-card">
+    <div class="custom-step-box">
         <div class="step-header">
             <span class="step-num">STEP 02</span>
             <span class="step-title">PROGRAM STUDI</span>
@@ -332,11 +357,10 @@ with col_s2:
     )
     st.markdown("</div>", unsafe_allow_html=True)
 
-st.write("")
 btn_hitung = st.button("Analisis Peluang →", use_container_width=True)
 
 # ==========================================
-# 4. HASIL ANALISIS
+# 6. HASIL ANALISIS
 # ==========================================
 if btn_hitung:
     if not selected_ptn or not selected_prodi:
@@ -365,12 +389,12 @@ if btn_hitung:
         st.markdown("<br>", unsafe_allow_html=True)
         
         st.markdown(f"""
-        <div style="margin-bottom: 0.5rem; font-size: 0.8rem; font-weight:700; color:#2563EB; letter-spacing:1px;">HASIL ANALISIS</div>
-        <h2 style="font-size: 2rem; font-weight:800; margin:0; color:#0F172A;">{target['NAMA_PRODI']}</h2>
-        <p style="font-size: 0.95rem; color:#64748B; margin-top:4px; margin-bottom:1.5rem;">
+        <div style="margin-bottom: 0.5rem; font-size: 0.8rem; font-weight:700; color:#3B82F6; letter-spacing:1px;">HASIL ANALISIS</div>
+        <h2 style="font-size: 1.9rem; font-weight:800; margin:0; color:{text_main};">{target['NAMA_PRODI']}</h2>
+        <p style="font-size: 0.92rem; color:{text_sub}; margin-top:4px; margin-bottom:1.5rem;">
             {target['JENJANG']} • <b>{target['NAMA_PTN']}</b> &nbsp;|&nbsp; 
-            <span style="background:#F1F5F9; padding:2px 8px; border-radius:6px; font-size:0.85rem;">Kode {target['KODE_PRODI']}</span> &nbsp;|&nbsp;
-            <span style="background:#F1F5F9; padding:2px 8px; border-radius:6px; font-size:0.85rem;">Portofolio: {target['JENIS_PORTOFOLIO']}</span>
+            <span style="background:{bg_input}; padding:2px 8px; border-radius:6px; font-size:0.85rem;">Kode {target['KODE_PRODI']}</span> &nbsp;|&nbsp;
+            <span style="background:{bg_input}; padding:2px 8px; border-radius:6px; font-size:0.85rem;">Portofolio: {target['JENIS_PORTOFOLIO']}</span>
         </p>
         """, unsafe_allow_html=True)
 
@@ -379,7 +403,7 @@ if btn_hitung:
             <div class="result-hero-label">PELUANG SIMULASI</div>
             <div class="result-hero-value">{peluang}%</div>
             <div class="badge-status {status_class}">{status_label}</div>
-            <p style="color:#64748B; font-size:0.95rem; margin-top:16px;"><b>{kuota}</b> kursi tersedia diperebutkan <b>{peminat:,}</b> peminat</p>
+            <p style="color:{text_sub}; font-size:0.95rem; margin-top:16px;"><b>{kuota}</b> kursi tersedia diperebutkan <b>{peminat:,}</b> peminat</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -388,7 +412,7 @@ if btn_hitung:
             st.markdown(f"""
             <div class="metric-card">
                 <div class="metric-title">🪑 DAYA TAMPUNG</div>
-                <div class="metric-val">{kuota} <span style="font-size:0.9rem; color:#64748B; font-weight:600;">kursi</span></div>
+                <div class="metric-val">{kuota} <span style="font-size:0.85rem; color:{text_sub}; font-weight:600;">kursi</span></div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -396,7 +420,7 @@ if btn_hitung:
             st.markdown(f"""
             <div class="metric-card">
                 <div class="metric-title">👥 PEMINAT LALU</div>
-                <div class="metric-val">{peminat:,} <span style="font-size:0.9rem; color:#64748B; font-weight:600;">siswa</span></div>
+                <div class="metric-val">{peminat:,} <span style="font-size:0.85rem; color:{text_sub}; font-weight:600;">siswa</span></div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -404,7 +428,7 @@ if btn_hitung:
             st.markdown(f"""
             <div class="metric-card">
                 <div class="metric-title">🔥 RASIO PERSAINGAN</div>
-                <div class="metric-val">1 : {rasio} <span style="font-size:0.9rem; color:#64748B; font-weight:600;">orang</span></div>
+                <div class="metric-val">1 : {rasio} <span style="font-size:0.85rem; color:{text_sub}; font-weight:600;">orang</span></div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -412,21 +436,21 @@ if btn_hitung:
 
         st.markdown(f"""
         <div class="insight-card">
-            <h4 style="margin:0 0 8px 0; font-weight:700; color:#0F172A;">💡 Apa artinya?</h4>
-            <p style="color:#475569; font-size:0.95rem; line-height:1.6; margin-bottom:16px;">
+            <h4 style="margin:0 0 8px 0; font-weight:700; color:{text_main};">💡 Apa artinya?</h4>
+            <p style="color:{text_sub}; font-size:0.95rem; line-height:1.6; margin-bottom:16px;">
                 Sekitar <b>{rasio} siswa</b> bersaing untuk memperebutkan 1 kursi. 
                 Dengan peluang sebesar <b>{peluang}%</b>, persaingan jurusan ini tergolong <b>{status_label.split(' ')[1]}</b>.
             </p>
-            <h4 style="margin:0 0 8px 0; font-weight:700; color:#0F172A;">🎯 Apa yang bisa kamu lakukan?</h4>
-            <p style="color:#475569; font-size:0.95rem; line-height:1.6; margin:0;">
+            <h4 style="margin:0 0 8px 0; font-weight:700; color:{text_main};">🎯 Apa yang bisa kamu lakukan?</h4>
+            <p style="color:{text_sub}; font-size:0.95rem; line-height:1.6; margin:0;">
                 Jurusan ini tergolong kompetitif. Pastikan pilihanmu sesuai dengan profil akademik dan pertimbangkan beberapa alternatif PTN/program studi di bawah ini sebagai opsi cadangan.
             </p>
         </div>
         """, unsafe_allow_html=True)
 
         st.markdown(f"""
-        <h3 style="font-weight:800; color:#0F172A; margin-bottom:4px;">Bandingkan dengan jurusan lain</h3>
-        <p style="color:#64748B; font-size:0.9rem; margin-bottom:1.5rem;">Lihat pilihan lain di {selected_ptn} dan temukan alternatif dengan tingkat persaingan berbeda.</p>
+        <h3 style="font-weight:800; color:{text_main}; margin-bottom:4px;">Bandingkan dengan jurusan lain</h3>
+        <p style="color:{text_sub}; font-size:0.9rem; margin-bottom:1.5rem;">Lihat pilihan lain di {selected_ptn} dan temukan alternatif dengan tingkat persaingan berbeda.</p>
         """, unsafe_allow_html=True)
 
         alt_df = filtered_prodi_df.sort_values(by='PELUANG_PERSEN', ascending=False)
@@ -446,8 +470,8 @@ if btn_hitung:
             }
         )
 
-# Disclaimer Footer (Perbaikan Baris 233)
-st.markdown("""
+# Disclaimer Footer
+st.markdown(f"""
 <div class="disclaimer-box">
     ⚠️ Hasil ini merupakan simulasi berdasarkan data peminat dan daya tampung yang tersedia, bukan jaminan kelulusan resmi.
 </div>
