@@ -12,13 +12,13 @@ st.set_page_config(
 )
 
 # ==========================================
-# 2. AUTO-THEME (FOLLOWS SYSTEM/PHONE SETTINGS) & ULTRA-MODERN CSS
+# 2. PERMANENT LIGHT THEME & MODERN CSS
 # ==========================================
-SYSTEM_CSS = """
+LIGHT_THEME_CSS = """
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-    /* BASE ROOT VARIABLES (DEFAULT LIGHT MODE) */
+    /* SYSTEM COLOR VARIABLES (PERMANENT LIGHT MODE) */
     :root {
         --bg-main: #F8FAFC;
         --bg-card: #FFFFFF;
@@ -31,23 +31,6 @@ SYSTEM_CSS = """
         --accent-light: #EFF6FF;
         --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 2px 4px -2px rgba(0, 0, 0, 0.03);
         --shadow-lg: 0 10px 25px -3px rgba(15, 23, 42, 0.06);
-    }
-
-    /* AUTOMATIC DARK MODE BASED ON OS/PHONE SYSTEM */
-    @media (prefers-color-scheme: dark) {
-        :root {
-            --bg-main: #090D16;
-            --bg-card: #131C2E;
-            --bg-input: #1E293B;
-            --border-color: #1E293B;
-            --text-primary: #F8FAFC;
-            --text-secondary: #94A3B8;
-            --accent-blue: #3B82F6;
-            --accent-blue-hover: #2563EB;
-            --accent-light: #1E293B;
-            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
-            --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.4);
-        }
     }
 
     /* GLOBAL RESET */
@@ -84,7 +67,7 @@ SYSTEM_CSS = """
         gap: 8px;
     }
     .app-brand span { color: var(--accent-blue); }
-    .auto-badge {
+    .light-badge {
         font-size: 0.72rem;
         font-weight: 700;
         background: var(--bg-input);
@@ -225,9 +208,9 @@ SYSTEM_CSS = """
         font-weight: 700;
         font-size: 0.85rem;
     }
-    .status-ketat { background: rgba(239, 68, 68, 0.12); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.3); }
-    .status-sedang { background: rgba(245, 158, 11, 0.12); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.3); }
-    .status-longgar { background: rgba(22, 163, 74, 0.12); color: #16A34A; border: 1px solid rgba(22, 163, 74, 0.3); }
+    .status-ketat { background: #FEF2F2; color: #EF4444; border: 1px solid #FCA5A5; }
+    .status-sedang { background: #FFFBEB; color: #F59E0B; border: 1px solid #FCD34D; }
+    .status-longgar { background: #F0FDF4; color: #16A34A; border: 1px solid #86EFAC; }
 
     /* METRICS */
     .metric-card {
@@ -278,7 +261,7 @@ SYSTEM_CSS = """
     }
 </style>
 """
-st.markdown(SYSTEM_CSS, unsafe_allow_html=True)
+st.markdown(LIGHT_THEME_CSS, unsafe_allow_html=True)
 
 # ==========================================
 # 3. BACKEND DATA LOGIC
@@ -307,7 +290,7 @@ df = load_data()
 st.markdown("""
 <div class="app-navbar">
     <div class="app-brand">🎓 PTN<span>Match</span></div>
-    <div class="auto-badge">📱 Auto Mode System</div>
+    <div class="light-badge">☀️ Light Mode</div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -321,7 +304,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ==========================================
-# 5. INPUT FORM (CARD NYATU & PRESISI)
+# 5. INPUT FORM (PRESISI TEMA TERANG)
 # ==========================================
 col_s1, col_s2 = st.columns(2, gap="small")
 
