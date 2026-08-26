@@ -12,40 +12,29 @@ st.set_page_config(
 )
 
 # ==========================================
-# 2. PERMANENT LIGHT THEME CSS
+# 2. STRICT FORCE LIGHT THEME CSS
 # ==========================================
-LIGHT_CSS = """
+FORCE_LIGHT_CSS = """
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-    /* BASE LIGHT THEME VARIABLES */
-    :root {
-        --bg-main: #F8FAFC;
-        --bg-card: #FFFFFF;
-        --bg-input: #F1F5F9;
-        --border-color: #E2E8F0;
-        --text-primary: #0F172A;
-        --text-secondary: #64748B;
-        --accent-blue: #2563EB;
-        --accent-blue-hover: #1D4ED8;
-        --accent-light: #EFF6FF;
-        --shadow-sm: 0 4px 6px -1px rgba(15, 23, 42, 0.03), 0 2px 4px -2px rgba(15, 23, 42, 0.03);
-        --shadow-lg: 0 10px 25px -3px rgba(15, 23, 42, 0.06);
+    /* PAKSA OVERRIDE CORE STREAMLIT CONTAINER */
+    html, body, [data-testid="stApp"], [data-testid="stAppViewContainer"], .main, .stApp {
+        background-color: #F8FAFC !important;
+        color: #0F172A !important;
+        font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
     }
 
-    /* GLOBAL RESET */
-    html, body, [class*="css"] {
-        font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
-        background-color: var(--bg-main) !important;
-        color: var(--text-primary) !important;
+    #MainMenu, footer, header, [data-testid="stHeader"] { 
+        visibility: hidden !important; 
+        height: 0 !important; 
     }
-    
-    #MainMenu, footer, header { visibility: hidden; height: 0; }
-    
+
     .block-container {
         padding-top: 1.5rem !important;
         padding-bottom: 3rem !important;
         max-width: 800px !important;
+        background-color: #F8FAFC !important;
     }
 
     /* NAVBAR */
@@ -55,18 +44,18 @@ LIGHT_CSS = """
         justify-content: space-between;
         padding: 0.75rem 0;
         margin-bottom: 2rem;
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: 1px solid #E2E8F0;
     }
     .app-brand {
         font-size: 1.3rem;
         font-weight: 800;
         letter-spacing: -0.5px;
-        color: var(--text-primary);
+        color: #0F172A !important;
         display: flex;
         align-items: center;
         gap: 8px;
     }
-    .app-brand span { color: var(--accent-blue); }
+    .app-brand span { color: #2563EB; }
 
     /* HERO SECTION */
     .hero-container {
@@ -77,8 +66,8 @@ LIGHT_CSS = """
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: var(--accent-light);
-        color: var(--accent-blue);
+        background: #EFF6FF;
+        color: #2563EB;
         padding: 6px 16px;
         border-radius: 99px;
         font-size: 0.78rem;
@@ -91,24 +80,24 @@ LIGHT_CSS = """
         font-weight: 800;
         line-height: 1.25;
         letter-spacing: -0.7px;
-        color: var(--text-primary);
+        color: #0F172A !important;
         margin-bottom: 0.6rem;
     }
     .hero-subtitle {
         font-size: 0.95rem;
-        color: var(--text-secondary);
+        color: #64748B !important;
         line-height: 1.55;
         max-width: 560px;
         margin: 0 auto;
     }
 
-    /* CARD INPUT WRAPPER PRESISI */
+    /* CARD INPUT WRAPPER */
     .input-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border-color);
+        background: #FFFFFF !important;
+        border: 1px solid #E2E8F0 !important;
         border-radius: 16px;
         padding: 18px 20px;
-        box-shadow: var(--shadow-sm);
+        box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03);
         margin-bottom: 1rem;
     }
     .step-header {
@@ -118,8 +107,8 @@ LIGHT_CSS = """
         margin-bottom: 0.3rem;
     }
     .step-num {
-        background: var(--accent-light);
-        color: var(--accent-blue);
+        background: #EFF6FF;
+        color: #2563EB;
         font-size: 0.72rem;
         font-weight: 800;
         padding: 3px 8px;
@@ -128,33 +117,33 @@ LIGHT_CSS = """
     .step-title {
         font-size: 0.92rem;
         font-weight: 700;
-        color: var(--text-primary);
+        color: #0F172A !important;
     }
     .step-desc {
         font-size: 0.82rem;
-        color: var(--text-secondary);
+        color: #64748B !important;
         margin-bottom: 0.8rem;
     }
 
-    /* CUSTOM STREAMLIT SELECTBOX */
+    /* CUSTOM STREAMLIT SELECTBOX - PAKSA TERANG */
     div[data-baseweb="select"] > div {
-        background-color: var(--bg-input) !important;
-        border: 1px solid var(--border-color) !important;
+        background-color: #F1F5F9 !important;
+        border: 1px solid #CBD5E1 !important;
         border-radius: 10px !important;
-        color: var(--text-primary) !important;
         min-height: 44px !important;
     }
     div[data-baseweb="select"] * {
-        color: var(--text-primary) !important;
+        color: #0F172A !important;
+        fill: #0F172A !important;
     }
     div[data-baseweb="select"]:hover > div {
-        border-color: var(--accent-blue) !important;
+        border-color: #2563EB !important;
         background-color: #FFFFFF !important;
     }
 
     /* BUTTON ACTION */
     div.stButton > button {
-        background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-blue-hover) 100%) !important;
+        background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
         color: #FFFFFF !important;
         font-weight: 700 !important;
         font-size: 1rem !important;
@@ -171,25 +160,25 @@ LIGHT_CSS = """
 
     /* RESULT HERO CARD */
     .result-hero {
-        background: var(--bg-card);
-        border: 1px solid var(--border-color);
+        background: #FFFFFF !important;
+        border: 1px solid #E2E8F0 !important;
         border-radius: 20px;
         padding: 26px 20px;
         text-align: center;
-        box-shadow: var(--shadow-lg);
+        box-shadow: 0 10px 25px -3px rgba(15, 23, 42, 0.06);
         margin: 1.5rem 0 1rem 0;
     }
     .result-hero-label {
         font-size: 0.8rem;
         font-weight: 700;
-        color: var(--text-secondary);
+        color: #64748B !important;
         text-transform: uppercase;
         letter-spacing: 0.8px;
     }
     .result-hero-value {
         font-size: 3.6rem;
         font-weight: 800;
-        color: var(--accent-blue);
+        color: #2563EB !important;
         letter-spacing: -1.5px;
         line-height: 1.1;
         margin: 8px 0;
@@ -201,50 +190,57 @@ LIGHT_CSS = """
         font-weight: 700;
         font-size: 0.85rem;
     }
-    .status-ketat { background: #FEF2F2; color: #EF4444; border: 1px solid #FCA5A5; }
-    .status-sedang { background: #FFFBEB; color: #D97706; border: 1px solid #FCD34D; }
-    .status-longgar { background: #F0FDF4; color: #16A34A; border: 1px solid #86EFAC; }
+    .status-ketat { background: #FEF2F2 !important; color: #EF4444 !important; border: 1px solid #FCA5A5 !important; }
+    .status-sedang { background: #FFFBEB !important; color: #D97706 !important; border: 1px solid #FCD34D !important; }
+    .status-longgar { background: #F0FDF4 !important; color: #16A34A !important; border: 1px solid #86EFAC !important; }
 
     /* METRICS */
     .metric-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border-color);
+        background: #FFFFFF !important;
+        border: 1px solid #E2E8F0 !important;
         border-radius: 14px;
         padding: 16px;
         text-align: center;
-        box-shadow: var(--shadow-sm);
+        box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03);
     }
     .metric-title {
         font-size: 0.72rem;
         font-weight: 700;
-        color: var(--text-secondary);
+        color: #64748B !important;
         text-transform: uppercase;
     }
     .metric-val {
         font-size: 1.35rem;
         font-weight: 800;
-        color: var(--text-primary);
+        color: #0F172A !important;
         margin-top: 2px;
     }
 
     /* INSIGHT */
     .insight-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border-color);
+        background: #FFFFFF !important;
+        border: 1px solid #E2E8F0 !important;
         border-radius: 16px;
         padding: 20px;
         margin: 1rem 0;
-        box-shadow: var(--shadow-sm);
+        box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.03);
+    }
+
+    /* DATAFRAME OVERRIDE LIGHT */
+    div[data-testid="stDataFrame"] {
+        background-color: #FFFFFF !important;
+        border: 1px solid #E2E8F0 !important;
+        border-radius: 12px !important;
     }
 
     /* FOOTER */
     .disclaimer-box {
         font-size: 0.8rem;
-        color: var(--text-secondary);
+        color: #64748B !important;
         text-align: center;
         margin-top: 2.5rem;
         padding-top: 1.2rem;
-        border-top: 1px solid var(--border-color);
+        border-top: 1px solid #E2E8F0;
     }
 
     /* MOBILE OPTIMIZATION */
@@ -256,7 +252,7 @@ LIGHT_CSS = """
     }
 </style>
 """
-st.markdown(LIGHT_CSS, unsafe_allow_html=True)
+st.markdown(FORCE_LIGHT_CSS, unsafe_allow_html=True)
 
 # ==========================================
 # 3. BACKEND DATA LOGIC
@@ -280,7 +276,7 @@ def load_data():
 df = load_data()
 
 # ==========================================
-# 4. NAVBAR HEADER (CLEAN LIGHT THEME)
+# 4. NAVBAR HEADER
 # ==========================================
 st.markdown("""
 <div class="app-navbar">
@@ -298,7 +294,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ==========================================
-# 5. INPUT FORM (PRESISI TEMPLATE)
+# 5. INPUT FORM
 # ==========================================
 col_s1, col_s2 = st.columns(2, gap="small")
 
@@ -383,7 +379,7 @@ if btn_hitung:
             <div class="result-hero-label">{target['NAMA_PTN']} — {target['NAMA_PRODI']}</div>
             <div class="result-hero-value">{peluang}%</div>
             <div class="badge-status {status_class}">{status_label}</div>
-            <p style="color:var(--text-secondary); font-size:0.88rem; margin-top:12px;"><b>{kuota}</b> kuota diperebutkan oleh <b>{peminat:,}</b> peminat</p>
+            <p style="color:#64748B; font-size:0.88rem; margin-top:12px;"><b>{kuota}</b> kuota diperebutkan oleh <b>{peminat:,}</b> peminat</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -414,15 +410,15 @@ if btn_hitung:
 
         st.markdown(f"""
         <div class="insight-card">
-            <h4 style="margin:0 0 6px 0; font-weight:700; font-size:0.95rem; color:var(--text-primary);">💡 Analisis Peluang</h4>
-            <p style="color:var(--text-secondary); font-size:0.88rem; line-height:1.55; margin:0;">
+            <h4 style="margin:0 0 6px 0; font-weight:700; font-size:0.95rem; color:#0F172A;">💡 Analisis Peluang</h4>
+            <p style="color:#64748B; font-size:0.88rem; line-height:1.55; margin:0;">
                 Rasio persaingan prodi ini adalah <b>1 : {rasio}</b>. Setiap 1 kursi diperebutkan oleh {rasio} pendaftar. 
                 Pertimbangkan prodi alternatif dengan rasio lebih longgar di bawah ini sebagai opsi aman.
             </p>
         </div>
         """, unsafe_allow_html=True)
 
-        st.markdown("""<h4 style="font-weight:700; font-size:1rem; margin-top:1.5rem; margin-bottom:0.5rem;">Opsi Prodi Lain di PTN Ini</h4>""", unsafe_allow_html=True)
+        st.markdown("""<h4 style="font-weight:700; font-size:1rem; margin-top:1.5rem; margin-bottom:0.5rem; color:#0F172A;">Opsi Prodi Lain di PTN Ini</h4>""", unsafe_allow_html=True)
 
         alt_df = filtered_prodi_df.sort_values(by='PELUANG_PERSEN', ascending=False)
 
