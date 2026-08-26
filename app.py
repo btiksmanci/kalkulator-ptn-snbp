@@ -33,84 +33,111 @@ st.title("🎓 Kalkulator Rasio Persaingan & Peluang PTN")
 st.markdown("Cek persentase peluang lulus dan rasio ketatnya persaingan jurusan targetmu berdasarkan data resmi Daya Tampung & Peminat.")
 st.divider()
 
-# --- FORM PENCARIAN DI HALAMAN UTAMA (Bukan Sidebar) ---
-st.subheader("🔍 Cari & Pilih Jurusan Target")
+# --- FORM PENCARIAN DI HALAMAN UTAMA ---
+st.subheader("🔍 Pilih Jurusan Target")
 
 col_search1, col_search2 = st.columns(2)
 
 with col_search1:
     list_ptn = sorted(df['NAMA_PTN'].unique())
-    selected_ptn = st.selectbox("1. Pilih Universitas / PTN", list_ptn)
+    # 1. Dropdown PTN dibuat kosong secara default (None)
+    selected_ptn = st.selectbox(
+        "1. Pilih Universitas / PTN", 
+        list_ptn, 
+        index=None, 
+        placeholder="-- Pilih Universitas --"
+    )
 
 # Filter prodi berdasarkan PTN pilihan
-filtered_prodi_df = df[df['NAMA_PTN'] == selected_ptn]
-list_prodi = sorted(filtered_prodi_df['NAMA_PRODI'].unique())
+if selected_ptn:
+    filtered_prodi_df = df[df['NAMA_PTN'] == selected_ptn]
+    list_prodi = sorted(filtered_prodi_df['NAMA_PRODI'].unique())
+else:
+    filtered_prodi_df = pd.DataFrame()
+    list_prodi = []
 
 with col_search2:
-    selected_prodi = st.selectbox("2. Pilih Program Studi", list_prodi)
-
-st.divider()
-
-# Ambil data spesifik jurusan terpilih
-target = filtered_prodi_df[filtered_prodi_df['NAMA_PRODI'] == selected_prodi].iloc[0]
-
-kuota = target['DAYA_TAMPUNG_2026']
-peminat = target['PEMINAT_2025']
-peluang = target['PELUANG_PERSEN']
-rasio = target['RASIO_PERSAINGAN']
-
-# --- TAMPILAN ANALISIS KAMPUS & JURUSAN ---
-st.subheader(f"📌 {target['NAMA_PRODI']} ({target['JENJANG']})")
-st.caption(f"🏛️ **{target['NAMA_PTN']}** | Kode Prodi: `{target['KODE_PRODI']}` | Portofolio: `{target['JENIS_PORTOFOLIO']}`")
-
-col1, col2, col3, col4 = st.columns(4)
-col1.metric("📦 Daya Tampung (Kuota)", f"{kuota} Kursi")
-col2.metric("👥 Peminat Tahun Lalu", f"{peminat} Pendaftar")
-col3.metric("📊 Persentase Peluang", f"{peluang}%")
-col4.metric("⚖️ Rasio Persaingan", f"1 : {rasio} Orang")
+    # 1. Dropdown Prodi dibuat kosong secara default (None)
+    selected_prodi = st.selectbox(
+        "2. Pilih Program Studi", 
+        list_prodi, 
+        index=None, 
+        placeholder="-- Pilih Program Studi --",
+        disabled=(not selected_ptn) # Terkunci sampai PTN dipilih
+    )
 
 st.write("")
 
-# --- ANALISIS TINGKAT KESULITAN / KEKETATAN ---
-if peminat == 0:
-    st.info("ℹ️ **Jurusan Baru / Belum Ada Data Peminat**: Peluang relatif aman karena belum ada kompetisi tercatat.")
-elif peluang < 5.0:
-    st.error(f"### 🔴 Tingkat Persaingan: SANGAT KETAT (Super Favorit)\n"
-             f"Hanya **{peluang}%** dari total pendaftar yang diterima (Kamu harus menyisihkan **{rasio} orang** untuk mendapatkan 1 kursi). "
-             f"Direkomendasikan sebagai **Pilihan 1** dengan strategi nilai yang sangat kuat.")
-elif peluang <= 15.0:
-    st.warning(f"### 🟠 Tingkat Persaingan: KETAT / TINGGI\n"
-               f"Peluang diterima **{peluang}%** (Kamu harus menyisihkan sekitar **{rasio} orang** per kursi). "
-               f"Merupakan jurusan favorit yang butuh persiapan matang.")
-elif peluang <= 30.0:
-    st.info(f"### 🟡 Tingkat Persaingan: SEDANG\n"
-            f"Peluang diterima **{peluang}%** (Rasio persaingan **1 : {rasio}** orang). "
-            f"Sangat baik dijadikan **Pilihan 1** atau **Pilihan 2** yang aman.")
-else:
-    st.success(f"### 🟢 Tingkat Persaingan: MODERAT / PELUANG BESAR\n"
-               f"Peluang kelulusan tergolong tinggi sebesar **{peluang}%** (Persaingan **1 : {rasio}** orang). "
-               f"Sangat direkomendasikan untuk menunjang aman di **Pilihan 2**.")
+# 2. Tombol "Hitung Peluang"
+btn_hitungs = st.button("🚀 Hitung Peluang", type="primary", use_container_width=True)
 
 st.divider()
 
-# --- REKOMENDASI JURUSAN SEJENIS / PTN SAMA ---
-st.subheader(f"💡 Perbandingan Jurusan Lain di {selected_ptn}")
-st.markdown("Berikut urutan jurusan dari yang paling longgar (Peluang Terbesar) hingga paling ketat di kampus ini:")
+# 3. Logika Menampilkan Hasil Hanya Setelah Tombol Diklik
+if btn_hitungs:
+    if not selected_ptn or not selected_prodi:
+        st.warning("⚠️ Silakan pilih Universitas dan Program Studi terlebih dahulu sebelum menekan tombol Hitung Peluang.")
+    else:
+        # Ambil data spesifik jurusan terpilih
+        target = filtered_prodi_df[filtered_prodi_df['NAMA_PRODI'] == selected_prodi].iloc[0]
 
-# Tabel Seluruh Prodi di Kampus Terpilih
-alt_df = filtered_prodi_df.sort_values(by='PELUANG_PERSEN', ascending=False)
+        kuota = target['DAYA_TAMPUNG_2026']
+        peminat = target['PEMINAT_2025']
+        peluang = target['PELUANG_PERSEN']
+        rasio = target['RASIO_PERSAINGAN']
 
-st.dataframe(
-    alt_df[['KODE_PRODI', 'NAMA_PRODI', 'JENJANG', 'DAYA_TAMPUNG_2026', 'PEMINAT_2025', 'PELUANG_PERSEN', 'RASIO_PERSAINGAN']],
-    use_container_width=True,
-    hide_index=True,
-    column_config={
-        "KODE_PRODI": "Kode",
-        "NAMA_PRODI": "Program Studi",
-        "JENJANG": "Jenjang",
-        "DAYA_TAMPUNG_2026": "Kuota 2026",
-        "PEMINAT_2025": "Peminat 2025",
-        "PELUANG_PERSEN": "Peluang Lulus (%)",
-        "RASIO_PERSAINGAN": "Persaingan (1 : N)"
-    }
-)
+        # --- TAMPILAN ANALISIS KAMPUS & JURUSAN ---
+        st.subheader(f"📌 {target['NAMA_PRODI']} ({target['JENJANG']})")
+        st.caption(f"🏛️ **{target['NAMA_PTN']}** | Kode Prodi: `{target['KODE_PRODI']}` | Portofolio: `{target['JENIS_PORTOFOLIO']}`")
+
+        col1, col2, col3, col4 = st.columns(4)
+        col1.metric("📦 Daya Tampung (Kuota)", f"{kuota} Kursi")
+        col2.metric("👥 Peminat Tahun Lalu", f"{peminat} Pendaftar")
+        col3.metric("📊 Persentase Peluang", f"{peluang}%")
+        col4.metric("⚖️ Rasio Persaingan", f"1 : {rasio} Orang")
+
+        st.write("")
+
+        # --- ANALISIS TINGKAT KESULITAN / KEKETATAN ---
+        if peminat == 0:
+            st.info("ℹ️ **Jurusan Baru / Belum Ada Data Peminat**: Peluang relatif aman karena belum ada kompetisi tercatat.")
+        elif peluang < 5.0:
+            st.error(f"### 🔴 Tingkat Persaingan: SANGAT KETAT (Super Favorit)\n"
+                     f"Hanya **{peluang}%** dari total pendaftar yang diterima (Kamu harus menyisihkan **{rasio} orang** untuk mendapatkan 1 kursi). "
+                     f"Direkomendasikan sebagai **Pilihan 1** dengan strategi nilai yang sangat kuat.")
+        elif peluang <= 15.0:
+            st.warning(f"### 🟠 Tingkat Persaingan: KETAT / TINGGI\n"
+                       f"Peluang diterima **{peluang}%** (Kamu harus menyisihkan sekitar **{rasio} orang** per kursi). "
+                       f"Merupakan jurusan favorit yang butuh persiapan matang.")
+        elif peluang <= 30.0:
+            st.info(f"### 🟡 Tingkat Persaingan: SEDANG\n"
+                    f"Peluang diterima **{peluang}%** (Rasio persaingan **1 : {rasio}** orang). "
+                    f"Sangat baik dijadikan **Pilihan 1** atau **Pilihan 2** yang aman.")
+        else:
+            st.success(f"### 🟢 Tingkat Persaingan: MODERAT / PELUANG BESAR\n"
+                       f"Peluang kelulusan tergolong tinggi sebesar **{peluang}%** (Persaingan **1 : {rasio}** orang). "
+                       f"Sangat direkomendasikan untuk menunjang aman di **Pilihan 2**.")
+
+        st.divider()
+
+        # --- REKOMENDASI JURUSAN SEJENIS / PTN SAMA ---
+        st.subheader(f"💡 Perbandingan Jurusan Lain di {selected_ptn}")
+        st.markdown("Berikut urutan jurusan dari yang paling longgar (Peluang Terbesar) hingga paling ketat di kampus ini:")
+
+        # Tabel Seluruh Prodi di Kampus Terpilih
+        alt_df = filtered_prodi_df.sort_values(by='PELUANG_PERSEN', ascending=False)
+
+        st.dataframe(
+            alt_df[['KODE_PRODI', 'NAMA_PRODI', 'JENJANG', 'DAYA_TAMPUNG_2026', 'PEMINAT_2025', 'PELUANG_PERSEN', 'RASIO_PERSAINGAN']],
+            use_container_width=True,
+            hide_index=True,
+            column_config={
+                "KODE_PRODI": "Kode",
+                "NAMA_PRODI": "Program Studi",
+                "JENJANG": "Jenjang",
+                "DAYA_TAMPUNG_2026": "Kuota 2026",
+                "PEMINAT_2025": "Peminat 2025",
+                "PELUANG_PERSEN": "Peluang Lulus (%)",
+                "RASIO_PERSAINGAN": "Persaingan (1 : N)"
+            }
+        )
