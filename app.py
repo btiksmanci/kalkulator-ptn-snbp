@@ -188,7 +188,7 @@ MODERN_THEME_CSS = """
         margin-bottom: 1.5rem;
     }
 
-    /* TABLE STYLES (PURE HTML - NEVER FAILS) */
+    /* TABLE STYLES (PURE HTML - STABIL) */
     .table-section-title {
         font-size: 1.1rem;
         font-weight: 700;
@@ -199,7 +199,7 @@ MODERN_THEME_CSS = """
         background: #FFFFFF;
         border: 1px solid #E2E8F0;
         border-radius: 14px;
-        overflow: hidden;
+        overflow-x: auto;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
     }
     table.data-table {
@@ -239,7 +239,7 @@ MODERN_THEME_CSS = """
 st.markdown(MODERN_THEME_CSS, unsafe_allow_html=True)
 
 # ==========================================
-# 3. KONEKSI KODE DAN PEMROSESAN DATA
+# 3. KONEKSI DATA & PEMROSESAN
 # ==========================================
 @st.cache_data
 def get_clean_data():
@@ -421,4 +421,5 @@ if btn_analyze:
             </table>
         </div>
         """
+        
         st.markdown(full_table_html, unsafe_allow_html=True)
