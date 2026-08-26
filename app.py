@@ -2,7 +2,7 @@ import pandas as pd
 import streamlit as st
 
 # ==========================================
-# 1. KONFIGURASI HALAMAN
+# 1. KONFIGURASI HALAMAN STREAMLIT
 # ==========================================
 st.set_page_config(
     page_title="PTNMatch — Analisis Peluang SNBP",
@@ -12,13 +12,12 @@ st.set_page_config(
 )
 
 # ==========================================
-# 2. DESIGN SYSTEM & MODERN STYLING (SINGLE LIGHT THEME)
+# 2. DESIGN SYSTEM (SINGLE CLEAN LIGHT THEME)
 # ==========================================
 MODERN_THEME_CSS = """
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-    /* BASE CONTAINER OVERRIDE */
     html, body, [data-testid="stAppViewContainer"], .main {
         background-color: #F8FAFC !important;
         font-family: 'Plus Jakarta Sans', sans-serif !important;
@@ -35,7 +34,6 @@ MODERN_THEME_CSS = """
         max-width: 860px !important;
     }
 
-    /* HEADER & BRANDING */
     .brand-header {
         text-align: center;
         margin-bottom: 2rem;
@@ -69,7 +67,6 @@ MODERN_THEME_CSS = """
         line-height: 1.5;
     }
 
-    /* CARD CONTAINER UNTUK FORM & METRICS */
     .card-box {
         background: #FFFFFF;
         border: 1px solid #E2E8F0;
@@ -79,18 +76,13 @@ MODERN_THEME_CSS = """
         margin-bottom: 1.25rem;
     }
 
-    /* LABEL SELECTBOX DIBUAT MODERN */
     .input-label {
         font-size: 0.85rem;
         font-weight: 700;
         color: #334155;
         margin-bottom: 6px;
-        display: flex;
-        align-items: center;
-        gap: 6px;
     }
 
-    /* CUSTOM STYLED BUTTON */
     div.stButton > button {
         background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
         color: #FFFFFF !important;
@@ -108,7 +100,6 @@ MODERN_THEME_CSS = """
         box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35) !important;
     }
 
-    /* HERO RESULT CARD */
     .hero-result {
         background: #FFFFFF;
         border: 1px solid #E2E8F0;
@@ -135,7 +126,6 @@ MODERN_THEME_CSS = """
         margin: 12px 0;
     }
 
-    /* STATUS BADGES */
     .status-pill {
         display: inline-block;
         padding: 6px 18px;
@@ -148,7 +138,6 @@ MODERN_THEME_CSS = """
     .status-sedang { background: #FEFCE8; color: #CA8A04; border: 1px solid #FDE047; }
     .status-aman { background: #F0FDF4; color: #16A34A; border: 1px solid #86EFAC; }
 
-    /* MINI METRICS CARD */
     .metric-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -176,7 +165,6 @@ MODERN_THEME_CSS = """
         margin-top: 4px;
     }
 
-    /* INSIGHT BOX */
     .insight-card {
         background: #F8FAFC;
         border: 1px solid #E2E8F0;
@@ -188,7 +176,6 @@ MODERN_THEME_CSS = """
         margin-bottom: 1.5rem;
     }
 
-    /* TABLE STYLES (PURE HTML - STABIL) */
     .table-section-title {
         font-size: 1.1rem;
         font-weight: 700;
@@ -227,14 +214,13 @@ MODERN_THEME_CSS = """
         background-color: #F8FAFC;
     }
 
-    /* RESPONSIVE DESIGN */
     @media (max-width: 640px) {
         .brand-title { font-size: 1.6rem; }
         .hero-percent { font-size: 3rem; }
         .metric-grid { grid-template-columns: 1fr; }
     }
 </style>
-""", unsafe_allow_html=True)
+"""
 
 st.markdown(MODERN_THEME_CSS, unsafe_allow_html=True)
 
@@ -325,7 +311,6 @@ if btn_analyze:
         peluang = target['PELUANG_PERSEN']
         rasio = target['RASIO_PERSAINGAN']
 
-        # Klasifikasi Status Keketatan
         if peminat == 0:
             status_class = "status-aman"
             status_label = "🟢 PRODI BARU / BEBAS KETATAN"
@@ -369,7 +354,7 @@ if btn_analyze:
         </div>
         """, unsafe_allow_html=True)
 
-        # 3. Actionable UX Insights
+        # 3. Insights
         st.markdown(f"""
         <div class="insight-card">
             <strong style="color: #0F172A;">💡 Catatan Strategi:</strong><br>
@@ -378,7 +363,7 @@ if btn_analyze:
         </div>
         """, unsafe_allow_html=True)
 
-        # 4. Pure HTML Table (Antigagal / Clean Render)
+        # 4. Pure HTML Table
         st.markdown(f'<div class="table-section-title">💡 Jurusan Lain di {target["NAMA_PTN"]} (Diurutkan dari Terlonggar)</div>', unsafe_allow_html=True)
 
         alt_df = filtered_prodi_df.sort_values(by='PELUANG_PERSEN', ascending=False)
@@ -392,7 +377,7 @@ if btn_analyze:
             table_rows_html += f"""
             <tr style="{row_bg}">
                 <td><b>{r['KODE_PRODI']}</b></td>
-                <td><b>{r['NAMA_PRODI']}</b> {badge_target}</td>
+                <td><b>{r['NAMA_PRODI']}</b>{badge_target}</td>
                 <td>{r['JENJANG']}</td>
                 <td>{r['DAYA_TAMPUNG_2026']} Kursi</td>
                 <td>{r['PEMINAT_2025']:,}</td>
